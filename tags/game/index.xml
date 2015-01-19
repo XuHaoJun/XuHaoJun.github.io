@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Game on xublog</title>
+    <link>http://xuhaojun.github.io/tags/game/</link>
+    <description>Recent content in Game on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 23 May 2014 18:45:54 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/game/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Astar Path Finding Example (C)</title>
+      <link>http://xuhaojun.github.io/2014/05/23/astar-c/</link>
+      <pubDate>Fri, 23 May 2014 18:45:54 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/23/astar-c/</guid>
+      <description>
+
+&lt;p&gt;在學校出了個需要寫尋路的期末作業，說實話大一只學過 C++
+，到現在才發覺自己居然沒有認真學過
+C，所以花了三天的時間寫出來能過關的作業：
+&lt;a href=&#34;https://github.com/XuHaoJun/astar-c&#34;&gt;astar-c&lt;/a&gt; 。&lt;/p&gt;
+
+&lt;h1 id=&#34;作業介紹-a-id-sec-1-name-sec-1-a:e38a197891fd8de86956c2fd27369d1e&#34;&gt;作業介紹：&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;地圖初始大小為 20x20 的矩形，人物起始座標是在 &lt;code&gt;(0, 0)&lt;/code&gt; ，分別要照順序走
+&lt;code&gt;((10,
+10), (5, 5), (15, 15))&lt;/code&gt; 這個路徑，且不能重複走兩次，像是你直接斜著走到
+&lt;code&gt;(10,
+10)&lt;/code&gt; 的話就會經過 &lt;code&gt;(5, 5)&lt;/code&gt; 就不符合作業要求了，之後在地圖上隨機放 3~5 個
+2x2
+的矩形方塊作為障礙物，此障礙物不能在初始點和路徑上，並且要有方法繞過障礙物，若路徑完全被擋死請顯示出來，顯示要求不拘（我是每走一步就印出整張地圖和座標訊息）。&lt;/p&gt;
+
+&lt;h1 id=&#34;算法介紹-a-id-sec-2-name-sec-2-a:e38a197891fd8de86956c2fd27369d1e&#34;&gt;算法介紹&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.policyalmanac.org/games/aStarTutorial.htm&#34;&gt;A* Pathfinding for
+Beginners&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;我 Astar 的算法是從上面這個網站學到的，如果你是搜尋 Astar
+到此文章的，強烈建議你看第一手原文，不要看我這殘缺二手中文！&lt;/p&gt;
+
+&lt;p&gt;簡而言之就是每走一步就對周遭的格子進行估值，然後從中選出最適合的格子，然後反覆直到目的或沒路徑。&lt;/p&gt;
+
+&lt;h1 id=&#34;用-c-的心得-a-id-sec-3-name-sec-3-a:e38a197891fd8de86956c2fd27369d1e&#34;&gt;用 C 的心得&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;根本惡夢阿，釋放錯記憶體，指標指錯地方，用到很多 &lt;code&gt;Linked List&lt;/code&gt;
+的結構，每次循環這個結構都要開個 temp 變量，Debug De
+到死，現在那個寫出來的作業懶的和手動釋放記憶體爭鬥了，等忙完其他事在開始重寫那部份吧。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>黑白棋 (Clojurescript)</title>
+      <link>http://xuhaojun.github.io/2014/05/11/reversi-game-clojurescript/</link>
+      <pubDate>Sun, 11 May 2014 19:10:27 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/11/reversi-game-clojurescript/</guid>
+      <description>
+
+&lt;p&gt;一個簡單的單機網頁(html5)黑白棋遊戲。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://xuhaojun.github.io/reversi/&#34;&gt;Try it Online&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/XuHaoJun/reversi&#34;&gt;Source code&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;實現算法-a-id-sec-1-name-sec-1-a:62581f113666cc3902cd87e363146d86&#34;&gt;實現算法&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;每次下棋對其八個鄰近方格做掃描，如果是相反顏色的棋子，就往其方位向前找到另一個相同顏色的棋子，若有找到則翻棋，沒有則遍歷下一個方位。&lt;/p&gt;
+
+&lt;h1 id=&#34;電腦-ai-下棋算法-a-id-sec-2-name-sec-2-a:62581f113666cc3902cd87e363146d86&#34;&gt;電腦(AI)下棋算法&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;暫時隨機，在看用哪種好。&lt;/p&gt;
+
+&lt;h1 id=&#34;clojurescript-使用心得-a-id-sec-3-name-sec-3-a:62581f113666cc3902cd87e363146d86&#34;&gt;Clojurescript 使用心得&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;一堆括號阿！！每次都要讓函數回傳有意義的值，Debug
+起來也很容易，一個函數影響的範圍就只有他的參數而已，沒有隱示參數(全域變數、成員變數)的話就很好測試，每個函數就盡量小小的做一件事，不過到使用
+&lt;a href=&#34;https://github.com/photonstorm/phaser&#34;&gt;phaser&lt;/a&gt; (javascript html5 game
+framework)那層就一堆副作用囉!(set! xxx yyy)。&lt;/p&gt;
+
+&lt;h1 id=&#34;截圖-a-id-sec-4-name-sec-4-a:62581f113666cc3902cd87e363146d86&#34;&gt;截圖&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://xuhaojun.github.io/img/reversi-game.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

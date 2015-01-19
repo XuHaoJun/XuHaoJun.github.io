@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Html on xublog</title>
+    <link>http://xuhaojun.github.io/tags/html/</link>
+    <description>Recent content in Html on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 19 Aug 2013 19:26:15 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/html/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>解決 Org-mode(8.x) 轉 Html 中文換行變空格問題</title>
+      <link>http://xuhaojun.github.io/2013/08/19/han-extra-space-org-mode/</link>
+      <pubDate>Mon, 19 Aug 2013 19:26:15 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/19/han-extra-space-org-mode/</guid>
+      <description>&lt;p&gt;基本上是照這兩篇提供的解法去依樣畫葫蘆出來的 org-mode 版本。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/8550112/prevent-browser-converting-n-between-lines-into-space-for-chinese-characters/8551033#8551033&#34;&gt;Prevent browser converting &amp;lsquo;\n&amp;rsquo; between lines into space (for
+Chinese
+characters)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://chenyufei.info/blog/2011-12-23/fix-chinese-newline-becomes-space-in-browser-problem/&#34;&gt;解决 Markdown 转 HTML
+中文换行变空格的问题&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;大致上的解法是將 html 檔案裡，將中文字後有接個換行符的把他合併為一行。&lt;br /&gt;
+感覺上是個 workaround 的方法，如果在餵給 rss
+似乎又會有問題，不過我無法忍受那些多餘的空格。&lt;/p&gt;
+
+&lt;p&gt;代碼如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defun han/org-html-delete-extra-space (string backend info)
+  &amp;quot;Let chinese word to a line if match /han\newline/&amp;quot;
+  (when (and (org-export-derived-backend-p backend &#39;html)
+             (string-match &amp;quot;\\cc\n&amp;quot; string))
+    (replace-regexp-in-string &amp;quot;\\(\\cc\\)\n\\(\\cc\\)&amp;quot; &amp;quot;\\1\\2&amp;quot; string)))
+
+(eval-after-load &#39;ox-html
+  &#39;(add-to-list &#39;org-export-filter-final-output-functions
+                &#39;han/org-html-delete-extra-space))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;順便吐槽一下 emacs 裡的 regex，實在太多 &lt;code&gt;\&lt;/code&gt; 了&lt;br /&gt;
+這是上面連結文中 Ruby 的 Regex 樣式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# \p{Han} 是漢字
+gsub(/(\p{Han})\n(\p{Han})/m, &#39;\1\2&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;這是 Emacs-lisp 的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;;; \\cc 是漢字
+(replace-regexp-in-string &amp;quot;\\(\\cc\\)\n\\(\\cc\\)&amp;quot; &amp;quot;\\1\\2&amp;quot; string)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

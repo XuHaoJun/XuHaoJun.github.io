@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+    <title> 使用 Pentadactyl (Firefox add-on) &middot; xublog </title>
+
+    
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/ripples.min.css" rel="stylesheet">
+    <link href="/css/material-wfont.min.css" rel="stylesheet">
+    <link href="/css/highlightjs-default.min.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
+
+    
+    <script src="/js/jquery-1.10.2.min.js"></script>
+    <script defer src="/js/bootstrap.min.js"></script>
+    <script defer src="/js/ripples.min.js"></script>
+    <script src="/js/material.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $.material.init();
+      });
+    </script>
+    <script src="/js/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-50855458-2', 'auto');
+    ga('send', 'pageview');
+    </script>
+    
+
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    
+    
+  </head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid shadow-z-2">
+    <div class="navbar-header">
+      <i id="my-navbar-menu" class="navbar-brand mdi-navigation-menu"
+                             data-toggle="modal" data-target="#my-menu">
+      </i>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <h4 class="navbar-text">
+        
+        post
+        <i class="mdi-navigation-chevron-right"></i>
+        
+        使用 Pentadactyl (Firefox add-on)
+      </h4>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <i class="navbar-brand mdi-action-search"></i>
+        </li>
+        <li>
+          <form class="navbar-form" action="https://www.google.com/search" method="GET">
+            <input type="hidden" name="sitesearch" value="xuhaojun.github.io" />
+            <input name="q" type="text" result="0" class="form-control col-lg-8" placeholder="" />
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="my-menu" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <a href="http://xuhaojun.github.io" class="btn btn-primary btn-lg btn-block">xublog</a>
+        <a href="/post/" class="btn btn-default btn-lg btn-block">Posts</a>
+        <a href="/about/" class="btn btn-default btn-lg btn-block">About</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+</script>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9 col-sm-12">
+        <hr>
+        
+
+<blockquote>
+<p>Pentadactyl is a free browser add-on for Firefox, designed to make
+browsing more
+efficient and especially more keyboard accessible.</p>
+</blockquote>
+
+<p><a href="http://5digits.org/pentadactyl/index">Pentadactyl</a>
+是一個能讓你快速瀏覽網頁的一個火狐插件，其特點是用 Vim-like
+的方式來使用，也可以是說是以鍵盤來做瀏覽動作的一套按法。</p>
+
+<h1 id="一些使用心得-a-id-sec-1-name-sec-1-a:40065ec52ada4f825916b15dd2489b2f">一些使用心得<a id="sec-1" name="sec-1"></a></h1>
+
+<p>先聲明有些是定制後的 Pentadactyl
+才有的，所以預設的行為會和以下有些出入，還有我的鍵盤的敏感度也調高了。</p>
+
+<h2 id="快速移動-a-id-sec-1-1-name-sec-1-1-a:40065ec52ada4f825916b15dd2489b2f">快速移動<a id="sec-1-1" name="sec-1-1"></a></h2>
+
+<p>按鍵 <code>j k</code> 分別為上下移動網頁約5%， <code>h l</code> 為切換瀏覽至左和右邊的 Tab
+<code>space</code> 為向下一個 page ，加前綴 shift
+為上。僅僅這些基礎移動就大大超越還在用和滑鼠點擊分頁的我了！但失去滑鼠滾輪還是有差別的，所以我的使用習慣變為
+<code>space</code> 在網頁上下移動後，之後使用 <code>j k</code> 微調一下。 <code>gg</code> 和 <code>G</code>
+為頁首和尾。還有 Mark 頁面的功能呢！</p>
+
+<h2 id="如何點超連結-a-id-sec-1-2-name-sec-1-2-a:40065ec52ada4f825916b15dd2489b2f">如何點超連結？<a id="sec-1-2" name="sec-1-2"></a></h2>
+
+<p>這有點說不清，實際用的情況是 <code>f</code>
+後連結上頭會跑出英文字母，之後在照順序輸入你眼睛盯著的連結上的英文字母，
+<code>F</code> 則是會開新分頁，是一個很實用的功能，我把連結上頭出現的東西改成以
+<code>asdfjkl;</code> 排，這樣八個鍵，連移動手指頭都不需要！</p>
+
+<h2 id="開啟網頁-a-id-sec-1-3-name-sec-1-3-a:40065ec52ada4f825916b15dd2489b2f">開啟網頁<a id="sec-1-3" name="sec-1-3"></a></h2>
+
+<p><code>o</code> 在當前頁面開啟網頁， <code>t</code> 為開在新分頁，開啟後鍵入關鍵字，預設會使用
+Google 搜尋，有個很棒的功能叫 Auto-Completion
+，使用時會根據關鍵字給予補全，這類似你在
+Google
+的搜尋欄鍵入關鍵字時會從下方跑出一個列表供你選擇，常用補全的東西有歷史紀錄和剛剛提到搜尋引擎的補全，更多其他補全我也還不清楚但已經很夠用了。</p>
+
+<p>例如輸入個巴會出現我最近看到的和巴哈姆特有關聯的網址和 title
+但卻還跑出和巴士海峽相關的東西，當然能允許你更精確列出來，接個空白鍵和
+gamer 或哈，就會產生更加有關聯的資訊了。</p>
+
+<h2 id="其他實用的功能-a-id-sec-1-4-name-sec-1-4-a:40065ec52ada4f825916b15dd2489b2f">其他實用的功能<a id="sec-1-4" name="sec-1-4"></a></h2>
+
+<p><code>r</code> 為更新網頁、 <code>d</code> 為刪除 、 <code>b</code> 則是變成文字輸出你的分頁後選擇，
+<code>數字+b</code> 則是直接跳轉至指定Tab， <code>/</code> 是搜尋當前頁面， <code>u</code>
+回復剛關閉的頁面也能補全最近關過的頁面， <code>Esc</code> 取消，其他的上官網看吧。</p>
+
+<h1 id="一個小短片-a-id-sec-2-name-sec-2-a:40065ec52ada4f825916b15dd2489b2f">一個小短片<a id="sec-2" name="sec-2"></a></h1>
+
+<p>兩分鐘的影片</p>
+
+<p><a href="http://youtu.be/BuANeWJR-lM">Pentadactyl show on youtube</a></p>
+
+        <hr>
+        <div class="well well-sm"> 
+          <h4>August 17, 2013<br>
+            <small>99 words</small></h4>
+          <hr>
+          <strong>Categories</strong>
+          <ul class="list-unstyled">
+            
+            <li><a href="/categories/computer">computer</a></li>
+            
+          </ul>
+          <hr>
+          <strong>Tags</strong><br>
+          <a class="label label-default" href="/tags/firefox">firefox</a> <a class="label label-default" href="/tags/pentadactyl">pentadactyl</a> 
+          <hr>
+          <ul class="pager">
+            
+            <li>
+              <a class="previous" href="http://xuhaojun.github.io/2013/08/19/han-extra-space-org-mode/">← 解決 Org-mode(8.x) 轉 Html 中文換行變空格問題</a>
+            </li>
+            
+            
+            <li>
+              <a class="next" href="http://xuhaojun.github.io/2013/08/17/about-web-programming/">初入網頁設計 →</a>
+            </li>
+            
+          </ul>
+          <hr>
+          <strong>Comments</strong><br>
+          
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+    <title> xublog &middot; xublog </title>
+
+    
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/ripples.min.css" rel="stylesheet">
+    <link href="/css/material-wfont.min.css" rel="stylesheet">
+    <link href="/css/highlightjs-default.min.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
+
+    
+    <script src="/js/jquery-1.10.2.min.js"></script>
+    <script defer src="/js/bootstrap.min.js"></script>
+    <script defer src="/js/ripples.min.js"></script>
+    <script src="/js/material.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $.material.init();
+      });
+    </script>
+    <script src="/js/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-50855458-2', 'auto');
+    ga('send', 'pageview');
+    </script>
+    
+
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    
+    <link href="http://xuhaojun.github.io/index.xml" rel="alternate" type="application/rss+xml" title="xublog" />
+  </head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid shadow-z-2">
+    <div class="navbar-header">
+      <i id="my-navbar-menu" class="navbar-brand mdi-navigation-menu"
+                             data-toggle="modal" data-target="#my-menu">
+      </i>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <h4 class="navbar-text">
+        
+        xublog
+      </h4>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <i class="navbar-brand mdi-action-search"></i>
+        </li>
+        <li>
+          <form class="navbar-form" action="https://www.google.com/search" method="GET">
+            <input type="hidden" name="sitesearch" value="xuhaojun.github.io" />
+            <input name="q" type="text" result="0" class="form-control col-lg-8" placeholder="" />
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="my-menu" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <a href="http://xuhaojun.github.io" class="btn btn-primary btn-lg btn-block">xublog</a>
+        <a href="/post/" class="btn btn-default btn-lg btn-block">Posts</a>
+        <a href="/about/" class="btn btn-default btn-lg btn-block">About</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+</script>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9 col-sm-12">
+        
+        
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2014/05/23/astar-c/">Astar Path Finding Example (C)</a> <small class="pull-right">May 23, 2014</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><p>在學校出了個需要寫尋路的期末作業，說實話大一只學過 C++
+，到現在才發覺自己居然沒有認真學過
+C，所以花了三天的時間寫出來能過關的作業：
+<a href="https://github.com/XuHaoJun/astar-c">astar-c</a> 。</p>
+
+<h1 id="作業介紹-a-id-sec-1-name-sec-1-a:e38a197891fd8de86956c2fd27369d1e">作業介紹：<a id="sec-1" name="sec-1"></a></h1>
+
+<p>地圖初始大小為 20x20 的矩形，人物起始座標是在 <code>(0, 0)</code> ，分別要照順序走
+<code>((10,
+10), (5, 5), (15, 15))</code> 這個路徑，且不能重複走兩次，像是你直接斜著走到
+<code>(10,
+10)</code> 的話就會經過 <code>(5, 5)</code> 就不符合作業要求了，之後在地圖上隨機放 3~5 個
+2x2
+的矩形方塊作為障礙物，此障礙物不能在初始點和路徑上，並且要有方法繞過障礙物，若路徑完全被擋死請顯示出來，顯示要求不拘（我是每走一步就印出整張地圖和座標訊息）。</p>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2014/05/23/astar-c/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2014/05/16/writing-clojure-in-emacs/">Clojure/Clojurescript Emacs 開發環境</a> <small class="pull-right">May 16, 2014</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><p>簡單的 clojure/clojurescript 開發環境。</p>
+
+<h1 id="基本功能安裝-a-id-sec-1-name-sec-1-a:24669216ecb34bc767f2c748b881a6c8">基本功能安裝<a id="sec-1" name="sec-1"></a></h1>
+
+<p>推薦從 emacs 24 起，自帶的 package 系統來安裝。</p>
+
+<p>首先加入更多 package 的安裝來源 <a href="http://melpa.milkbox.net">melpa</a>
+<a href="http://marmalade-repo.org/">marmalade</a></p>
+
+<pre><code>(defvar marmalade '(&quot;marmalade&quot; .  &quot;http://marmalade-repo.org/packages/&quot;))
+(defvar gnu '(&quot;gnu&quot; . &quot;http://elpa.gnu.org/packages/&quot;))
+(defvar melpa '(&quot;melpa&quot; . &quot;http://melpa.milkbox.net/packages/&quot;))
+(add-to-list 'package-archives marmalade)
+(add-to-list 'package-archives melpa t)
+(package-initialize)
+</code></pre>
+
+<p>安裝 clojure-mode：
+<code>M-x package-install</code> <code>clojure-mode</code></p>
+
+<p>這樣就有基本的代碼高亮和縮進功能了。</p>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2014/05/16/writing-clojure-in-emacs/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2014/05/16/my-linux-desktop/">我的 Linux 桌面</a> <small class="pull-right">May 16, 2014</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><h1 id="linux-distribution-a-id-sec-1-name-sec-1-a:dd68e279f546165bcfb4e52dfd388714">Linux Distribution<a id="sec-1" name="sec-1"></a></h1>
+
+<p><a href="https://www.archlinux.org/">Arch Linux</a>
+是我現在用的最順手的發行版，剛入門的時候是用
+<a href="http://www.ubuntu-tw.org/">Ubuntu</a>
+，各種卡當不說，升級還要重裝系統，真坑爹阿！而且預設裝了太多我根本用不到的軟件，初學不久後，就判逃去
+Arch 陣營了，因為他是一個很純淨、簡單且更新快的發行版，還記得剛裝完 Arch
+後記憶體居然佔不到 100MB
+且運行快速，這對電腦配置不好的人來說根本超開心！還有 <a href="https://wiki.archlinux.org/">Arch
+WiKi</a> 這個查文檔的好東西。</p>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2014/05/16/my-linux-desktop/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2014/05/15/linux-remote-file-edit/">Linux 遠程文件編輯</a> <small class="pull-right">May 15, 2014</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><p>大部分都是 ssh
+連線過去使用那邊的環境來修改檔案，如果遠程環境沒有稱手的編輯器可是一件很惱人的一件事，所以找了一些方法在本地編輯文件。</p>
+
+<h1 id="ssh-filesystem-a-id-sec-1-name-sec-1-a:f64facb02be577ab15bca296e5ceef6a">SSH Filesystem<a id="sec-1" name="sec-1"></a></h1>
+
+<p><a href="http://fuse.sourceforge.net/sshfs.html">sshfs</a>
+是將遠程的文件系統掛載在本地，之後就可以在本地編輯了，也會同步更新上去。</p>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2014/05/15/linux-remote-file-edit/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2014/05/11/reversi-game-clojurescript/">黑白棋 (Clojurescript)</a> <small class="pull-right">May 11, 2014</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><p>一個簡單的單機網頁(html5)黑白棋遊戲。</p>
+
+<p><a href="https://xuhaojun.github.io/reversi/">Try it Online</a></p>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2014/05/11/reversi-game-clojurescript/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2014/05/10/clojure-recursion/">Clojure 遞迴測試</a> <small class="pull-right">May 10, 2014</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><p><a href="http://clojure.org/functional_programming#Functional%2520Programming--Recursive%2520Looping">Clojure Recursive
+Looping</a></p>
+
+<h1 id="傳統遞迴-a-id-sec-1-name-sec-1-a:35d8892b97503d2142a01e8e3b6e846d">傳統遞迴<a id="sec-1" name="sec-1"></a></h1>
+
+<h2 id="source-a-id-sec-1-1-name-sec-1-1-a:35d8892b97503d2142a01e8e3b6e846d">Source<a id="sec-1-1" name="sec-1-1"></a></h2>
+
+<pre><code>(defn deepable-recur? [deep-length]
+  (if (= 0 deep-length)
+    true
+    (deepable-recur? (dec deep-length))))
+</code></pre>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2014/05/10/clojure-recursion/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2013/10/20/openvpn-and-vpngate/">Openvpn &#43; Vpn Gate &#43; Ruby</a> <small class="pull-right">Oct 20, 2013</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><p>寫了個連去 vpngate 用的小腳本，不然每次得去官網手動下載設定檔太麻煩了。</p>
+
+<p>預設是連質量最高的 Server，也只能連這個，以後看需求重寫吧。</p>
+
+<h1 id="source-a-id-sec-1-name-sec-1-a:eb18c4e37c3842e712df167450d44783">Source<a id="sec-1" name="sec-1"></a></h1>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2013/10/20/openvpn-and-vpngate/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/">Ruby block match and jump (emacs evil-mode)</a> <small class="pull-right">Oct 19, 2013</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><h1 id="description-a-id-sec-1-name-sec-1-a:20e3104edfee02abb38223cd2bcf788a">Description<a id="sec-1" name="sec-1"></a></h1>
+
+<p>Emacs evil-mode <code>%</code> 功能加上 Ruby block 的配對，例如將光標放在 <code>class
+Foo</code> 上後鍵入 <code>%</code> 可以跳轉至相符的 <code>end</code> 。</p>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2013/09/03/pascal-triangle-ruby/">帕斯卡三角形 (Ruby)</a> <small class="pull-right">Sep 3, 2013</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><h1 id="帕斯卡三角形-a-id-sec-1-name-sec-1-a:0638fe5e5d536e297a6ec80324afce45">帕斯卡三角形<a id="sec-1" name="sec-1"></a></h1>
+
+<p><img src="//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/PascalTriangleAnimated2.gif/210px-PascalTriangleAnimated2.gif" alt="img" />
+</p>
+
+<pre><code>def pascal_triangle(n, i = 2, result = [[1], [1,1]])
+  if n == 1
+    [[1]]
+  elsif n == 2
+    [[1], [1,1]]
+  elsif i == n
+    result
+  else
+    current_row = [1]
+    (i-1).times do |n|
+      current_row &lt;&lt; (result[i-1][n] + result[i-1][n+1])
+    end
+    current_row &lt;&lt; 1
+
+    pascal_triangle(n, i+1, result &lt;&lt; current_row)
+  end
+end
+</code></pre>
+
+<ul>
+<li>Image reference: <a href="https://zh.wikipedia.org/zh-tw/%25E6%259D%25A8%25E8%25BE%2589%25E4%25B8%2589%25E8%25A7%2592%25E5%25BD%25A2">Pascal-triangle
+Wikipedia-chi</a></li>
+</ul>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2013/09/03/pascal-triangle-ruby/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2013/08/29/emacs-ruby-indent/">Emacs 自動縮進 Ruby&#39;s if-else</a> <small class="pull-right">Aug 29, 2013</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><h1 id="problem-a-id-sec-1-name-sec-1-a:cd231999e942cfc93b0759bc58b7811b">Problem<a id="sec-1" name="sec-1"></a></h1>
+
+<p>當我打完 elsif 時，他應該要縮進到 if 那邊。</p>
+
+<pre><code>if
+   elsif # Should indent this line
+end
+</code></pre>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2013/08/29/emacs-ruby-indent/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2013/08/27/armstrong-num-ruby/">阿姆斯壯數 (Ruby)</a> <small class="pull-right">Aug 27, 2013</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><p>寫一些簡單的演算法來熟悉 Ruby。</p>
+
+<h1 id="armstrong-number-a-id-sec-1-name-sec-1-a:6486ff3a0a39604736e43d2cf3c6c774">Armstrong number<a id="sec-1" name="sec-1"></a></h1>
+
+<ul>
+<li><a href="https://zh.wikipedia.org/wiki/%25E6%25B0%25B4%25E4%25BB%2599%25E8%258A%25B1%25E6%2595%25B0">阿姆斯壯數 -
+WiKi</a></li>
+</ul>
+
+<p>指一 N 位数，其各个数之 N 次方和等于该数。</p>
+
+<p>例如 153、370、371 及 407
+就是三位數的水仙花数，其各个数之立方和等于该数：</p>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2013/08/27/armstrong-num-ruby/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2013/08/25/gen-uniq-nums-ruby/">產生一組不重複整數的集合(Ruby)</a> <small class="pull-right">Aug 25, 2013</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><p>先用 Ruby 寫以前上 Android 中猜數字範例中用到的算法：</p>
+
+<h1 id="normal-way-1-a-id-sec-1-name-sec-1-a:813bc76884f654364af38e575809aea8">Normal Way - 1<a id="sec-1" name="sec-1"></a></h1>
+
+<pre><code>def get_uniq_nums(size, range)
+  ary = []
+  begin
+    r = rand(range)
+    if ary.member?(r)
+      next
+    else
+      ary &lt;&lt; r
+    end
+  end while( ary.length &lt; size )
+  return ary
+end
+</code></pre>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2013/08/25/gen-uniq-nums-ruby/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2013/08/23/emacs-org-octopress/">Org-mode &#43; Octopress &#43; Github 來搭建 Blog</a> <small class="pull-right">Aug 23, 2013</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><ul>
+<li>優點
+
+<ul>
+<li>免費網域、免費託管、免費流量</li>
+<li>版本管理，不用擔心備份！</li>
+<li>Org-mode or Markdown 撰寫效率好</li>
+</ul></li>
+<li>缺點
+
+<ul>
+<li>技術門檻要求較高<br />
+    需要懂一些 Git, Github, Org-mode 或 Makrdown，更進階要客製化
+Blog 的話，可能還要
+懂些許 Ruby (jekyll)</li>
+<li>Org-mode 的 code block 沒有 markdown&rsquo;s code block 的 title url
+功能。</li>
+</ul></li>
+</ul>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2013/08/23/emacs-org-octopress/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+        <div class="well well-sm">
+  <h2>
+    <a href="http://xuhaojun.github.io/2013/08/19/han-extra-space-org-mode/">解決 Org-mode(8.x) 轉 Html 中文換行變空格問題</a> <small class="pull-right">Aug 19, 2013</small><br>
+    <small></small>
+  </h2>
+  <hr>
+  <p><p>基本上是照這兩篇提供的解法去依樣畫葫蘆出來的 org-mode 版本。</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/8550112/prevent-browser-converting-n-between-lines-into-space-for-chinese-characters/8551033#8551033">Prevent browser converting &lsquo;\n&rsquo; between lines into space (for
+Chinese
+characters)</a></li>
+<li><a href="http://chenyufei.info/blog/2011-12-23/fix-chinese-newline-becomes-space-in-browser-problem/">解决 Markdown 转 HTML
+中文换行变空格的问题</a></li>
+</ul>
+
+<p>大致上的解法是將 html 檔案裡，將中文字後有接個換行符的把他合併為一行。<br />
+感覺上是個 workaround 的方法，如果在餵給 rss
+似乎又會有問題，不過我無法忍受那些多餘的空格。</p>
+
+<p>代碼如下：</p>
+</p>
+  <a class="btn btn-primary btn-xs" href="http://xuhaojun.github.io/2013/08/19/han-extra-space-org-mode/">Read More <span class="fa fa-angle-double-right"></span></a>
+</div>
+
+        
+      </div>
+    </div>
+  </div>
+</body>
+</html>

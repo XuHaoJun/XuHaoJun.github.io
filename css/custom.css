@@ -1,0 +1,22 @@
+body { padding-top: 70px; }
+
+@media screen and (min-width: 768px) {
+  #my-menu > .modal-dialog {
+    margin: 0;
+  }
+}
+
+#my-menu > .modal-dialog{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 20vw;
+}
+
+#my-menu .modal-body {
+  height: 100vh;
+}
+
+#my-navbar-menu:hover {
+  cursor: pointer;
+}

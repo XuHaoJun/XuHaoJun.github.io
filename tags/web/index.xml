@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Web on xublog</title>
+    <link>http://xuhaojun.github.io/tags/web/</link>
+    <description>Recent content in Web on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 17 Aug 2013 19:52:25 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/web/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>初入網頁設計</title>
+      <link>http://xuhaojun.github.io/2013/08/17/about-web-programming/</link>
+      <pubDate>Sat, 17 Aug 2013 19:52:25 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/17/about-web-programming/</guid>
+      <description>
+
+&lt;h1 id=&#34;因為暑假很無聊-所以-x2026-a-id-sec-1-name-sec-1-a:c50006b23da5aa2be4c52dfbd1bd1039&#34;&gt;因為暑假很無聊，所以&amp;#x2026;&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;來學學網頁設計！&lt;/p&gt;
+
+&lt;h1 id=&#34;初入-web-a-id-sec-2-name-sec-2-a:c50006b23da5aa2be4c52dfbd1bd1039&#34;&gt;初入 Web&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;關於網頁的知識處於懵懵懂懂的狀態，所去了&lt;a href=&#34;http://www.codecademy.com/&#34;&gt;
+Codecademy&lt;/a&gt; 學了些基本的 Html 和 Css
+語法後看到了也有 Ruby 的教學，靈光一閃想起了一個東西 &lt;code&gt;Ruby on Rails&lt;/code&gt;
+，一個Web應用框架！結束了在 Codecademy 的 Ruby 教學，遂開始了 Rails
+的&lt;a href=&#34;http://ihower.tw/rails3/index.html&#34;&gt;學習&lt;/a&gt;
+，不料這完完全全就是個坑，什麼
+&lt;code&gt;MVC架構&lt;/code&gt; 和 &lt;code&gt;Restful&lt;/code&gt; 還有 Ruby 的 =Convention over
+configuration=對新手來說實在太痛了，我看在撐一個禮拜看能不能習慣。&lt;/p&gt;
+
+&lt;h1 id=&#34;結論-a-id-sec-3-name-sec-3-a:c50006b23da5aa2be4c52dfbd1bd1039&#34;&gt;結論&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;雖然學了些東西不過還是沒有對做一個網頁有什麼實體的感覺，看到一些Rails的課程著重於實戰，真心想報名!，不過暑假快過完了，我看就靠自己摸索吧。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

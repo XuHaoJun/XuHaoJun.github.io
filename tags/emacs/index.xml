@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Emacs on xublog</title>
+    <link>http://xuhaojun.github.io/tags/emacs/</link>
+    <description>Recent content in Emacs on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 16 May 2014 19:13:28 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Clojure/Clojurescript Emacs 開發環境</title>
+      <link>http://xuhaojun.github.io/2014/05/16/writing-clojure-in-emacs/</link>
+      <pubDate>Fri, 16 May 2014 19:13:28 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/16/writing-clojure-in-emacs/</guid>
+      <description>
+
+&lt;p&gt;簡單的 clojure/clojurescript 開發環境。&lt;/p&gt;
+
+&lt;h1 id=&#34;基本功能安裝-a-id-sec-1-name-sec-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;基本功能安裝&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;推薦從 emacs 24 起，自帶的 package 系統來安裝。&lt;/p&gt;
+
+&lt;p&gt;首先加入更多 package 的安裝來源 &lt;a href=&#34;http://melpa.milkbox.net&#34;&gt;melpa&lt;/a&gt;
+&lt;a href=&#34;http://marmalade-repo.org/&#34;&gt;marmalade&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defvar marmalade &#39;(&amp;quot;marmalade&amp;quot; .  &amp;quot;http://marmalade-repo.org/packages/&amp;quot;))
+(defvar gnu &#39;(&amp;quot;gnu&amp;quot; . &amp;quot;http://elpa.gnu.org/packages/&amp;quot;))
+(defvar melpa &#39;(&amp;quot;melpa&amp;quot; . &amp;quot;http://melpa.milkbox.net/packages/&amp;quot;))
+(add-to-list &#39;package-archives marmalade)
+(add-to-list &#39;package-archives melpa t)
+(package-initialize)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;安裝 clojure-mode：
+&lt;code&gt;M-x package-install&lt;/code&gt; &lt;code&gt;clojure-mode&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;這樣就有基本的代碼高亮和縮進功能了。&lt;/p&gt;
+
+&lt;h1 id=&#34;強力插件-cider-clojure-ide-and-repl-a-id-sec-2-name-sec-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;強力插件: CIDER (Clojure IDE and REPL)&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/clojure-emacs/cider&#34;&gt;CIDER-github&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;安裝-a-id-sec-2-1-name-sec-2-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;安裝&lt;a id=&#34;sec-2-1&#34; name=&#34;sec-2-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;M-x package-install&lt;/code&gt; &lt;code&gt;cider&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;repl-交互式編程環境-a-id-sec-2-2-name-sec-2-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;REPL (交互式編程環境)&lt;a id=&#34;sec-2-2&#34; name=&#34;sec-2-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%25E8%25AF%25BB%25E5%258F%2596%25EF%25B9%25A3%25E6%25B1%2582%25E5%2580%25BC%25EF%25B9%25A3%25E8%25BE%2593%25E5%2587%25BA%25E5%25BE%25AA%25E7%258E%25AF&#34;&gt;REPL-wiki&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;安裝-a-id-sec-2-2-1-name-sec-2-2-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;安裝：&lt;a id=&#34;sec-2-2-1&#34; name=&#34;sec-2-2-1&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;推薦使用&lt;a href=&#34;http://leiningen.org/&#34;&gt;leiningen&lt;/a&gt; 來管理你的 clojure project.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;lein new myproject&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;安裝 &lt;a href=&#34;https://github.com/clojure-emacs/cider-nrepl&#34;&gt;cider-nrepl&lt;/a&gt;
+在 &lt;code&gt;~/.lein/profiles.clj&lt;/code&gt; 加入以下兩行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{:user
+ {:plugins [[cider/cider-nrepl &amp;quot;0.7.0-SNAPSHOT&amp;quot;]]}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;使用-a-id-sec-2-2-2-name-sec-2-2-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;使用：&lt;a id=&#34;sec-2-2-2&#34; name=&#34;sec-2-2-2&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;接下來在你的 emacs 執行 &lt;code&gt;M-x cider-jack-in&lt;/code&gt;
+沒有意外的話，會出現一個 repl 的 buffer，關掉是 &lt;code&gt;cider-quit&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;幾個必用的 emacs function , 把他們綁在你喜歡的 key 上吧。
+&lt;code&gt;cider-eval-last-sexp&lt;/code&gt; , &lt;code&gt;cider-eval-defun-at-point&lt;/code&gt; ,
+&lt;code&gt;cider-switch-to-repl-buffer&lt;/code&gt; , &lt;code&gt;cider-jump&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;browser-repl-for-clojurescript-a-id-sec-2-3-name-sec-2-3-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;Browser REPL (for clojurescript)&lt;a id=&#34;sec-2-3&#34; name=&#34;sec-2-3&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/cemerick/austin&#34;&gt;Austin-github&lt;/a&gt;
+&lt;a href=&#34;https://github.com/cemerick/austin/tree/master/browser-connected-repl-sample&#34;&gt;專案範例&lt;/a&gt;
+在 &lt;code&gt;~/.lein/profiles.clj&lt;/code&gt; 加入以下兩行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{:user
+ {:plugins [[com.cemerick/austin &amp;quot;0.1.4&amp;quot;]]}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在你的 cljs 檔案裡的 namespace 新增：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(:require [clojure.browser.repl])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在 REPL 的環境裡：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(def repl-env (reset! cemerick.austin.repls/browser-repl-env
+                      (cemerick.austin/repl-env)))
+(cemerick.austin.repls/cljs-repl repl-env)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下來在新的 REPL 環境裡：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(js/alert &amp;quot;hello browser&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你的 browser 應該會有反應。&lt;/p&gt;
+
+&lt;h2 id=&#34;自動補全-a-id-sec-2-4-name-sec-2-4-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;自動補全&lt;a id=&#34;sec-2-4&#34; name=&#34;sec-2-4&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/company-mode/company-mode&#34;&gt;company-mode-github&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;安裝-a-id-sec-2-4-1-name-sec-2-4-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;安裝：&lt;a id=&#34;sec-2-4-1&#34; name=&#34;sec-2-4-1&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;M-x package-install&lt;/code&gt; &lt;code&gt;company&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;開啟：
+&lt;code&gt;M-x global-company-mode&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;預設開啟：在你的 init.el 加入這行。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(global-company-mode)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;使用-a-id-sec-2-4-2-name-sec-2-4-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;使用：&lt;a id=&#34;sec-2-4-2&#34; name=&#34;sec-2-4-2&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;必須在你的 repl 開啟的時候才有效！&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;M-n&lt;/code&gt;, &lt;code&gt;M-p&lt;/code&gt; 上下選擇候選鍵。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;//company-mode.github.io/images/company-elisp.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;其他插件推薦-a-id-sec-3-name-sec-3-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;其他插件推薦&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/jlr/rainbow-delimiters&#34;&gt;rainbow-delimiters&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gitorious.org/evil/pages/Home&#34;&gt;evil&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.emacswiki.org/emacs/InteractivelyDoThings&#34;&gt;ido&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;截圖-a-id-sec-4-name-sec-4-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;截圖&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/emacs-clojure-development.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>我的 Linux 桌面</title>
+      <link>http://xuhaojun.github.io/2014/05/16/my-linux-desktop/</link>
+      <pubDate>Fri, 16 May 2014 18:43:49 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/16/my-linux-desktop/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux-distribution-a-id-sec-1-name-sec-1-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Linux Distribution&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.archlinux.org/&#34;&gt;Arch Linux&lt;/a&gt;
+是我現在用的最順手的發行版，剛入門的時候是用
+&lt;a href=&#34;http://www.ubuntu-tw.org/&#34;&gt;Ubuntu&lt;/a&gt;
+，各種卡當不說，升級還要重裝系統，真坑爹阿！而且預設裝了太多我根本用不到的軟件，初學不久後，就判逃去
+Arch 陣營了，因為他是一個很純淨、簡單且更新快的發行版，還記得剛裝完 Arch
+後記憶體居然佔不到 100MB
+且運行快速，這對電腦配置不好的人來說根本超開心！還有 &lt;a href=&#34;https://wiki.archlinux.org/&#34;&gt;Arch
+WiKi&lt;/a&gt; 這個查文檔的好東西。&lt;/p&gt;
+
+&lt;h1 id=&#34;desktop-enviroment-a-id-sec-2-name-sec-2-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Desktop Enviroment&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;經歷了幾番波折後，最後比較穩定使用
+&lt;a href=&#34;https://github.com/c00kiemon5ter/monsterwm&#34;&gt;monsterwm&lt;/a&gt;
+，好吧，嚴格來說它只是個 Window
+Manager 只是桌面環境中的一個子功能罷了，特色就是 dynamic tiling window
+和只用按鍵來操控視窗，不過這幾乎沒啥用到，最多使用就是快速切一邊瀏覽器一邊編輯器如下圖：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-------------
+|           |
+|  Firefox  |
+|-----------|
+|  Emacs    |
+|           |
+-------------
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;還有一個優點就是它啟動後記憶體只佔 1MB。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;實際截圖：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/my-monsterwm.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;是不是很簡潔阿！沒有一絲多餘的東西。&lt;/p&gt;
+
+&lt;h1 id=&#34;browser-a-id-sec-3-name-sec-3-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Browser&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://moztw.org/firefox/&#34;&gt;Firefox&lt;/a&gt;
+是我主要使用的瀏覽器，唯一讓我重度使用的原因：&lt;a href=&#34;http://5digits.org/pentadactyl/&#34;&gt;Pentadactyl&lt;/a&gt;，
+簡單來說就是以鍵盤為主來瀏覽網頁！&lt;/p&gt;
+
+&lt;p&gt;直接上我使用 Pendatactyl 的影片： &lt;a href=&#34;http://youtu.be/BuANeWJR-lM&#34;&gt;Pentadactyl
+Show&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;editor-a-id-sec-4-name-sec-4-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Editor&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;主力編輯器： &lt;a href=&#34;https://www.gnu.org/software/emacs/&#34;&gt;Emacs&lt;/a&gt;
+，現在這篇文章就是在 Emacs 下撰寫的和使用他的
+&lt;a href=&#34;http://orgmode.org/&#34;&gt;Org-mode&lt;/a&gt; ，也是我 Programming 使用的編輯器。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;實際截圖：
+&lt;img src=&#34;/img/my-emacs.png&#34; alt=&#34;img&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;file-manager-a-id-sec-5-name-sec-5-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;File Manager&lt;a id=&#34;sec-5&#34; name=&#34;sec-5&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://docs.xfce.org/xfce/thunar/start&#34;&gt;Thunar&lt;/a&gt;
+，只在要整理一些圖片檔的時候才會用到它，其餘的時間都是 shell 下管理的。&lt;/p&gt;
+
+&lt;h1 id=&#34;media-player-a-id-sec-6-name-sec-6-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Media Player&lt;a id=&#34;sec-6&#34; name=&#34;sec-6&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;使用的是 &lt;a href=&#34;http://smplayer.sourceforge.net/&#34;&gt;SMPlayer&lt;/a&gt;
+，這已經滿足我的需求了！&lt;/p&gt;
+
+&lt;h1 id=&#34;pdf-viewer-a-id-sec-7-name-sec-7-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;PDF Viewer&lt;a id=&#34;sec-7&#34; name=&#34;sec-7&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://pwmt.org/projects/zathura&#34;&gt;zathura&lt;/a&gt;
+是我常用來閱讀電子書的軟體，有像 Vi-like 的快捷鍵，簡單的 &lt;code&gt;j&lt;/code&gt; &lt;code&gt;k&lt;/code&gt; 和
+&lt;code&gt;space&lt;/code&gt; &lt;code&gt;shift-space&lt;/code&gt; &lt;code&gt;/&lt;/code&gt; 對我而言就很夠用了。&lt;/p&gt;
+
+&lt;h1 id=&#34;revision-control-a-id-sec-8-name-sec-8-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Revision Control&lt;a id=&#34;sec-8&#34; name=&#34;sec-8&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://git-cola.github.io/&#34;&gt;git-cola&lt;/a&gt; 是 git
+圖形化界面的軟體，我只在觀察別人的 Repo 的 Log 才會使用。&lt;/p&gt;
+
+&lt;h1 id=&#34;terminal-emulator-a-id-sec-9-name-sec-9-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Terminal Emulator&lt;a id=&#34;sec-9&#34; name=&#34;sec-9&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://pod.tst.eu/http://cvs.schmorp.de/rxvt-unicode/doc/rxvt.1.pod&#34;&gt;rxvt-unicode&lt;/a&gt;
+是我主要使用的虛擬終端，看中它有 C-S
+架構，開多個比較省資源，稍微配一下顏色，就夠用了。&lt;/p&gt;
+
+&lt;h1 id=&#34;office-suite-a-id-sec-10-name-sec-10-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Office Suite&lt;a id=&#34;sec-10&#34; name=&#34;sec-10&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://zh-tw.libreoffice.org/&#34;&gt;LibreOffice&lt;/a&gt; 用來開 .ppt .doc
+的玩意兒，基本上我自己不用它，目前學著用 Latex 或
+Org-mode 來取代文檔撰寫和投影片製作。&lt;/p&gt;
+
+&lt;h1 id=&#34;summary-a-id-sec-11-name-sec-11-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Summary&lt;a id=&#34;sec-11&#34; name=&#34;sec-11&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;絕大部分使用 Linux 時間都在 &lt;code&gt;monsterwm&lt;/code&gt; &lt;code&gt;Firefox&lt;/code&gt; &lt;code&gt;Emacs&lt;/code&gt; &lt;code&gt;Urxvt&lt;/code&gt;
+&lt;code&gt;zathura&lt;/code&gt; 下度過，無非就是讀著電子書和放狗和 Stack Overflow
+來查查資料，之後就是 Emacs 編程和在 Terminal
+裡使用 CLI 的工具，總是搞不懂為啥有人老是說 Linux
+的桌面體驗很差？應該還沒到很差的地步吧&amp;#x2026;&amp;#x2026;雖然遊戲很少就是了。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ruby block match and jump (emacs evil-mode)</title>
+      <link>http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/</link>
+      <pubDate>Sat, 19 Oct 2013 19:55:09 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/</guid>
+      <description>
+
+&lt;h1 id=&#34;description-a-id-sec-1-name-sec-1-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Description&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;Emacs evil-mode &lt;code&gt;%&lt;/code&gt; 功能加上 Ruby block 的配對，例如將光標放在 &lt;code&gt;class
+Foo&lt;/code&gt; 上後鍵入 &lt;code&gt;%&lt;/code&gt; 可以跳轉至相符的 &lt;code&gt;end&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h1 id=&#34;example-a-id-sec-2-name-sec-2-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Example&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/evil-ruby-jump-item.gif&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;source-code-a-id-sec-3-name-sec-3-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Source Code&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;;; Require package: (evil)
+(evil-define-motion evil-ruby-jump-item (count)
+  :jump t
+  :type inclusive
+  (cond ((string-match ruby-block-beg-re (current-word))
+         (ruby-end-of-block count))
+        ((string-match ruby-block-end-re (current-word))
+         (ruby-beginning-of-block count))
+        (t
+         (evil-jump-item count))))
+
+(add-hook &#39;ruby-mode-hook
+          (lambda ()
+            (define-key evil-normal-state-local-map &amp;quot;%&amp;quot; &#39;evil-ruby-jump-item)
+            (define-key evil-motion-state-local-map &amp;quot;%&amp;quot; &#39;evil-ruby-jump-item)))
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Emacs 自動縮進 Ruby&#39;s if-else</title>
+      <link>http://xuhaojun.github.io/2013/08/29/emacs-ruby-indent/</link>
+      <pubDate>Thu, 29 Aug 2013 20:03:03 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/29/emacs-ruby-indent/</guid>
+      <description>
+
+&lt;h1 id=&#34;problem-a-id-sec-1-name-sec-1-a:cd231999e942cfc93b0759bc58b7811b&#34;&gt;Problem&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;當我打完 elsif 時，他應該要縮進到 if 那邊。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if
+   elsif # Should indent this line
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;正確的 if-else 縮進：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if 1&amp;gt;2
+  #....
+elsif
+  #...
+else
+  #...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很明顯 else 和 elsif 是向 if 對齊縮進的。&lt;/p&gt;
+
+&lt;h1 id=&#34;solution-a-id-sec-2-name-sec-2-a:cd231999e942cfc93b0759bc58b7811b&#34;&gt;Solution&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;發現在 Emacs 上沒有自動縮進 Ruby 的 if-else 語法後，去試了一下 vim
+發現可以處理 if-else
+的縮進，當然得跟上！&lt;/p&gt;
+
+&lt;p&gt;最簡單的方法就是在按 &lt;code&gt;space&lt;/code&gt; 時，檢查前一個 word 是不是 &lt;code&gt;else&lt;/code&gt; 或
+&lt;code&gt;elsif&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;首先我有用 ruby-electric，這東西會在你打 &lt;code&gt;if&lt;/code&gt; 或 &lt;code&gt;class&lt;/code&gt; 等等
+自動產生一個 &lt;code&gt;end&lt;/code&gt;
+在下行，他是依據你打 &lt;code&gt;if&amp;lt;space&amp;gt;&lt;/code&gt; 的 &lt;code&gt;&amp;lt;space&amp;gt;&lt;/code&gt; 時會觸發產生一個 &lt;code&gt;end&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;&amp;lt;space&amp;gt;&lt;/code&gt; 對應到 ruby-electric-space 這個 funciton，我從 ruby-electric
+裡複製過來，很像不應該這樣做，不過不管了。&lt;/p&gt;
+
+&lt;p&gt;以下是修改過後的版本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defun ruby-electric-space (arg)
+  (interactive &amp;quot;P&amp;quot;)
+  (self-insert-command (prefix-numeric-value arg))
+  (cond ((ruby-electric-space-can-be-expanded-p)
+         (save-excursion
+           (ruby-indent-line t)
+           (newline)
+           (ruby-electric-insert-end)))
+        ((ruby-electric-space-can-be-indent-p) (ruby-indent-line t))))
+
+(defun ruby-electric-space-can-be-indent-p ()
+  (and (ruby-electric-code-at-point-p)
+       (ruby-electric-matching-word-p)))
+
+(defun ruby-electric-matching-word-p ()
+  (save-excursion
+    (backward-word)
+    (string-match &amp;quot;\\(\\&amp;lt;else\\&amp;gt;\\|\\&amp;lt;elsif\\&amp;gt;\\)&amp;quot; (current-word))))
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

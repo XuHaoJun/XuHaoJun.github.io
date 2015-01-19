@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+    <title> Org-mode &#43; Octopress &#43; Github 來搭建 Blog &middot; xublog </title>
+
+    
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/ripples.min.css" rel="stylesheet">
+    <link href="/css/material-wfont.min.css" rel="stylesheet">
+    <link href="/css/highlightjs-default.min.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
+
+    
+    <script src="/js/jquery-1.10.2.min.js"></script>
+    <script defer src="/js/bootstrap.min.js"></script>
+    <script defer src="/js/ripples.min.js"></script>
+    <script src="/js/material.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $.material.init();
+      });
+    </script>
+    <script src="/js/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-50855458-2', 'auto');
+    ga('send', 'pageview');
+    </script>
+    
+
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    
+    
+  </head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid shadow-z-2">
+    <div class="navbar-header">
+      <i id="my-navbar-menu" class="navbar-brand mdi-navigation-menu"
+                             data-toggle="modal" data-target="#my-menu">
+      </i>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <h4 class="navbar-text">
+        
+        post
+        <i class="mdi-navigation-chevron-right"></i>
+        
+        Org-mode &#43; Octopress &#43; Github 來搭建 Blog
+      </h4>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <i class="navbar-brand mdi-action-search"></i>
+        </li>
+        <li>
+          <form class="navbar-form" action="https://www.google.com/search" method="GET">
+            <input type="hidden" name="sitesearch" value="xuhaojun.github.io" />
+            <input name="q" type="text" result="0" class="form-control col-lg-8" placeholder="" />
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="my-menu" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <a href="http://xuhaojun.github.io" class="btn btn-primary btn-lg btn-block">xublog</a>
+        <a href="/post/" class="btn btn-default btn-lg btn-block">Posts</a>
+        <a href="/about/" class="btn btn-default btn-lg btn-block">About</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+</script>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9 col-sm-12">
+        <hr>
+        
+
+<ul>
+<li>優點
+
+<ul>
+<li>免費網域、免費託管、免費流量</li>
+<li>版本管理，不用擔心備份！</li>
+<li>Org-mode or Markdown 撰寫效率好</li>
+</ul></li>
+<li>缺點
+
+<ul>
+<li>技術門檻要求較高<br />
+    需要懂一些 Git, Github, Org-mode 或 Makrdown，更進階要客製化
+Blog 的話，可能還要
+懂些許 Ruby (jekyll)</li>
+<li>Org-mode 的 code block 沒有 markdown&rsquo;s code block 的 title url
+功能。</li>
+</ul></li>
+</ul>
+
+<h1 id="org-mode-a-id-sec-1-name-sec-1-a:cbf7100be1a3666db65d058f688f37bb">Org-mode<a id="sec-1" name="sec-1"></a></h1>
+
+<blockquote>
+<p>Org mode is for keeping notes, maintaining TODO lists, planning
+projects, and
+authoring documents with a fast and effective plain-text system.<br />
+<strong><a href="http://orgmode.org/">http://orgmode.org/</a></strong></p>
+</blockquote>
+
+<p>Org-mode 是建立於 Emacs(編輯器)
+之上的插件，是一種輕量級的標記語言可以用來做時間管理、筆記、生成 Html
+&#x2026; ，同類型的流行的還有 Markdown，這篇文章基本上就是
+Emacs + org-mode 寫的，之後在透過插件
+<a href="https://github.com/yoshinari-nomura/org-octopress">org-octopress</a>
+生成給 Octopress 用。</p>
+
+<h2 id="install-emacs-24-x-a-id-sec-1-1-name-sec-1-1-a:cbf7100be1a3666db65d058f688f37bb">Install Emacs(24.x)<a id="sec-1-1" name="sec-1-1"></a></h2>
+
+<p>我只會在 Linux 平台上用 Package 裝。</p>
+
+<p>一些流行的 Linux distribution 的 Package Manager 安裝方法。</p>
+
+<pre><code>pacman -S emacs          # Archlinux
+apt-get install emacs    # Ubuntu
+yum install emacs        # Fedora
+</code></pre>
+
+<h2 id="install-org-and-org-octopress-a-id-sec-1-2-name-sec-1-2-a:cbf7100be1a3666db65d058f688f37bb">Install org and org-octopress<a id="sec-1-2" name="sec-1-2"></a></h2>
+
+<p>用 Emacs 裡的 Package Manager 安裝：</p>
+
+<pre><code># 在家目錄建一個 .emacs.d 資料夾後，在裡面建 init.el
+mkdir ~/.emacs.d
+touch ~/.emacs.d/init.el
+</code></pre>
+
+<p>在 init.el 添加：</p>
+
+<pre><code>(add-to-list 'package-archives
+  '(&quot;marmalade&quot; . &quot;http://marmalade-repo.org/packages/&quot;))
+
+(add-to-list 'package-archives
+  '(&quot;melpa&quot; . &quot;http://melpa.milkbox.net/packages/&quot;) t)
+
+(package-initialize)
+</code></pre>
+
+<p>開啟 Emacs 鍵入 <code>M-x package-install org RET</code> ，把 org 換成
+org-octopress 後安裝。</p>
+
+<h2 id="org-octopress-setup-a-id-sec-1-3-name-sec-1-3-a:cbf7100be1a3666db65d058f688f37bb">Org-octopress Setup<a id="sec-1-3" name="sec-1-3"></a></h2>
+
+<p>以下是從
+<a href="https://github.com/yoshinari-nomura/org-octopress">org-octopress</a> 的
+README 裡擷取 Basic Settings 的片段。</p>
+
+<p>添加在 init.el。</p>
+
+<ul>
+<li><p>Emacs Settings:</p>
+
+<p>(require &lsquo;org-octopress)
+(setq org-octopress-directory-top       &ldquo;~/octopress/source&rdquo;)
+(setq org-octopress-directory-posts     &ldquo;~/octopress/source/_posts&rdquo;)
+(setq org-octopress-directory-org-top   &ldquo;~/octopress/source&rdquo;)
+(setq org-octopress-directory-org-posts &ldquo;~/octopress/source/blog&rdquo;)
+(setq org-octopress-setup-file          &ldquo;~/org-sty/setupfile.org&rdquo;)</p></li>
+
+<li><p>Octopress Settings:</p></li>
+</ul>
+
+<p>In octopress/<sub>config</sub>.yml, you must set the permelink
+attribute:<br />
+<code>permalink: /blog/:year-:month-:day-:title.html</code></p>
+
+<h1 id="octopress-a-id-sec-2-name-sec-2-a:cbf7100be1a3666db65d058f688f37bb">Octopress<a id="sec-2" name="sec-2"></a></h1>
+
+<p><a href="http://octopress.org/">Octopress</a> 是一套 Blog 的框架，所以一開始你的
+Blog 就有一個簡潔的外觀，功能上有支援 Twitter, Facebook, Delicious
+等等，也可以用來產生靜態 Blog 後放在 Github
+上，預設是用 Markdown 來撰寫文章。</p>
+
+<h2 id="install-and-use-octopress-a-id-sec-2-1-name-sec-2-1-a:cbf7100be1a3666db65d058f688f37bb">Install and Use Octopress<a id="sec-2-1" name="sec-2-1"></a></h2>
+
+<p>要先安裝 <a href="http://www.ruby-lang.org/en/">Ruby</a> 和
+<a href="http://gitscm.com/">Git</a>。<br />
+官方的方法： <a href="http://octopress.org/docs/setup/">Octopress Setup</a></p>
+
+<h1 id="github-a-id-sec-3-name-sec-3-a:cbf7100be1a3666db65d058f688f37bb">Github<a id="sec-3" name="sec-3"></a></h1>
+
+<p>首先有個 <a href="https://github.com/">Github</a> 的帳號後，建立一個 Repository 為
+username.github.io，之後去你的 octopress 的根目錄鍵入 <code>bundle exec rake
+setup_github_page</code> 輸入剛剛建完給你的 url。</p>
+
+<p>官方文檔: <a href="https://help.github.com/">GithubHelp</a></p>
+
+<h1 id="基本流程-a-id-sec-4-name-sec-4-a:cbf7100be1a3666db65d058f688f37bb">基本流程<a id="sec-4" name="sec-4"></a></h1>
+
+<ol>
+<li>開啟 Emacs 鍵入 <code>M-x org-octopress RET</code> ，會到 org-octopress
+的界面鍵入 <code>w</code>
+   和標題，開始撰寫文章。</li>
+<li>寫完後，鍵入 <code>C-c C-e P x octopress</code> 來生成靜態網頁</li>
+<li>在你的 octopress 根目錄鍵入 <code>bundle exec rake gen_deploy</code></li>
+<li>也可以把 source branch 下 push 上去做版本管理 <code>git push -u origin
+source</code></li>
+</ol>
+
+<p>文章打到一半或要做確認的時候用(需先生成靜態網頁) <code>bundle exec rake
+preview</code> ，之後在
+<a href="http://localhost:4000/">http://localhost:4000/</a> 可以看你的 Blog。</p>
+
+        <hr>
+        <div class="well well-sm"> 
+          <h4>August 23, 2013<br>
+            <small>280 words</small></h4>
+          <hr>
+          <strong>Categories</strong>
+          <ul class="list-unstyled">
+            
+            <li><a href="/categories/computer">computer</a></li>
+            
+          </ul>
+          <hr>
+          <strong>Tags</strong><br>
+          <a class="label label-default" href="/tags/octopress">octopress</a> <a class="label label-default" href="/tags/github">github</a> <a class="label label-default" href="/tags/org-mode">org-mode</a> <a class="label label-default" href="/tags/blog">blog</a> 
+          <hr>
+          <ul class="pager">
+            
+            <li>
+              <a class="previous" href="http://xuhaojun.github.io/2013/08/25/gen-uniq-nums-ruby/">← 產生一組不重複整數的集合(Ruby)</a>
+            </li>
+            
+            
+            <li>
+              <a class="next" href="http://xuhaojun.github.io/2013/08/19/han-extra-space-org-mode/">解決 Org-mode(8.x) 轉 Html 中文換行變空格問題 →</a>
+            </li>
+            
+          </ul>
+          <hr>
+          <strong>Comments</strong><br>
+          
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

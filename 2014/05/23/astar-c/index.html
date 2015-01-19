@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+    <title> Astar Path Finding Example (C) &middot; xublog </title>
+
+    
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/ripples.min.css" rel="stylesheet">
+    <link href="/css/material-wfont.min.css" rel="stylesheet">
+    <link href="/css/highlightjs-default.min.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
+
+    
+    <script src="/js/jquery-1.10.2.min.js"></script>
+    <script defer src="/js/bootstrap.min.js"></script>
+    <script defer src="/js/ripples.min.js"></script>
+    <script src="/js/material.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $.material.init();
+      });
+    </script>
+    <script src="/js/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-50855458-2', 'auto');
+    ga('send', 'pageview');
+    </script>
+    
+
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    
+    
+  </head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid shadow-z-2">
+    <div class="navbar-header">
+      <i id="my-navbar-menu" class="navbar-brand mdi-navigation-menu"
+                             data-toggle="modal" data-target="#my-menu">
+      </i>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <h4 class="navbar-text">
+        
+        post
+        <i class="mdi-navigation-chevron-right"></i>
+        
+        Astar Path Finding Example (C)
+      </h4>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <i class="navbar-brand mdi-action-search"></i>
+        </li>
+        <li>
+          <form class="navbar-form" action="https://www.google.com/search" method="GET">
+            <input type="hidden" name="sitesearch" value="xuhaojun.github.io" />
+            <input name="q" type="text" result="0" class="form-control col-lg-8" placeholder="" />
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="my-menu" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <a href="http://xuhaojun.github.io" class="btn btn-primary btn-lg btn-block">xublog</a>
+        <a href="/post/" class="btn btn-default btn-lg btn-block">Posts</a>
+        <a href="/about/" class="btn btn-default btn-lg btn-block">About</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+</script>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9 col-sm-12">
+        <hr>
+        
+
+<p>在學校出了個需要寫尋路的期末作業，說實話大一只學過 C++
+，到現在才發覺自己居然沒有認真學過
+C，所以花了三天的時間寫出來能過關的作業：
+<a href="https://github.com/XuHaoJun/astar-c">astar-c</a> 。</p>
+
+<h1 id="作業介紹-a-id-sec-1-name-sec-1-a:e38a197891fd8de86956c2fd27369d1e">作業介紹：<a id="sec-1" name="sec-1"></a></h1>
+
+<p>地圖初始大小為 20x20 的矩形，人物起始座標是在 <code>(0, 0)</code> ，分別要照順序走
+<code>((10,
+10), (5, 5), (15, 15))</code> 這個路徑，且不能重複走兩次，像是你直接斜著走到
+<code>(10,
+10)</code> 的話就會經過 <code>(5, 5)</code> 就不符合作業要求了，之後在地圖上隨機放 3~5 個
+2x2
+的矩形方塊作為障礙物，此障礙物不能在初始點和路徑上，並且要有方法繞過障礙物，若路徑完全被擋死請顯示出來，顯示要求不拘（我是每走一步就印出整張地圖和座標訊息）。</p>
+
+<h1 id="算法介紹-a-id-sec-2-name-sec-2-a:e38a197891fd8de86956c2fd27369d1e">算法介紹<a id="sec-2" name="sec-2"></a></h1>
+
+<p><a href="http://www.policyalmanac.org/games/aStarTutorial.htm">A* Pathfinding for
+Beginners</a></p>
+
+<p>我 Astar 的算法是從上面這個網站學到的，如果你是搜尋 Astar
+到此文章的，強烈建議你看第一手原文，不要看我這殘缺二手中文！</p>
+
+<p>簡而言之就是每走一步就對周遭的格子進行估值，然後從中選出最適合的格子，然後反覆直到目的或沒路徑。</p>
+
+<h1 id="用-c-的心得-a-id-sec-3-name-sec-3-a:e38a197891fd8de86956c2fd27369d1e">用 C 的心得<a id="sec-3" name="sec-3"></a></h1>
+
+<p>根本惡夢阿，釋放錯記憶體，指標指錯地方，用到很多 <code>Linked List</code>
+的結構，每次循環這個結構都要開個 temp 變量，Debug De
+到死，現在那個寫出來的作業懶的和手動釋放記憶體爭鬥了，等忙完其他事在開始重寫那部份吧。</p>
+
+        <hr>
+        <div class="well well-sm"> 
+          <h4>May 23, 2014<br>
+            <small>52 words</small></h4>
+          <hr>
+          <strong>Categories</strong>
+          <ul class="list-unstyled">
+            
+            <li><a href="/categories/computer">computer</a></li>
+            
+          </ul>
+          <hr>
+          <strong>Tags</strong><br>
+          <a class="label label-default" href="/tags/game">game</a> <a class="label label-default" href="/tags/alogrithm">alogrithm</a> <a class="label label-default" href="/tags/c">c</a> 
+          <hr>
+          <ul class="pager">
+            
+            <li>
+              <a class="previous" href="http://xuhaojun.github.io/about/">← About</a>
+            </li>
+            
+            
+            <li>
+              <a class="next" href="http://xuhaojun.github.io/2014/05/16/writing-clojure-in-emacs/">Clojure/Clojurescript Emacs 開發環境 →</a>
+            </li>
+            
+          </ul>
+          <hr>
+          <strong>Comments</strong><br>
+          
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+ 
+var disqus_shortname = 'xublog'; 
+ 
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

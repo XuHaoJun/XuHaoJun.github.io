@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ruby on xublog</title>
+    <link>http://xuhaojun.github.io/tags/ruby/</link>
+    <description>Recent content in Ruby on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 20 Oct 2013 19:47:19 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/ruby/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Openvpn &#43; Vpn Gate &#43; Ruby</title>
+      <link>http://xuhaojun.github.io/2013/10/20/openvpn-and-vpngate/</link>
+      <pubDate>Sun, 20 Oct 2013 19:47:19 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/10/20/openvpn-and-vpngate/</guid>
+      <description>
+
+&lt;p&gt;寫了個連去 vpngate 用的小腳本，不然每次得去官網手動下載設定檔太麻煩了。&lt;/p&gt;
+
+&lt;p&gt;預設是連質量最高的 Server，也只能連這個，以後看需求重寫吧。&lt;/p&gt;
+
+&lt;h1 id=&#34;source-a-id-sec-1-name-sec-1-a:eb18c4e37c3842e712df167450d44783&#34;&gt;Source&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/env ruby
+### 1. Download(curl) vpngate csv from offical site
+### 2. Convert csv to ruby array
+### 3. Decode openvpn config by base64
+### 4. Run command openvpn and use the highest score server config file
+
+require &#39;csv&#39;
+require &#39;base64&#39;
+require &#39;tempfile&#39;
+
+### 1.
+vpngate_csv_url = &amp;quot;http://www.vpngate.net/api/iphone/&amp;quot;
+puts &amp;quot;==&amp;gt; Downloading vpngate csv from #{vpngate_csv_url}&amp;quot;
+vpngate_ori_csv = `curl #{vpngate_csv_url}`
+if not vpngate_ori_csv.empty?
+  puts &amp;quot;==&amp;gt; Successfully download&amp;quot;
+else
+  puts &amp;quot;==&amp;gt; Fail to download vpngate csv&amp;quot;
+  exit 0
+end
+
+
+### 2.
+vg_rb_csv = CSV.parse(vpngate_ori_csv)
+# vg_rb_csv[1]
+# =&amp;gt; [&amp;quot;#HostName&amp;quot;, &amp;quot;IP&amp;quot;, &amp;quot;Score&amp;quot;, &amp;quot;Ping&amp;quot;, &amp;quot;Speed&amp;quot;, &amp;quot;CountryLong&amp;quot;, &amp;quot;CountryShort&amp;quot;,
+#     &amp;quot;NumVpnSessions&amp;quot;, &amp;quot;Uptime&amp;quot;, &amp;quot;TotalUsers&amp;quot;, &amp;quot;TotalTraffic&amp;quot;, &amp;quot;LogType&amp;quot;, &amp;quot;Operator&amp;quot;,
+#     &amp;quot;Message&amp;quot;, &amp;quot;OpenVPN_ConfigData_Base64&amp;quot;]
+
+
+### 3.
+openvpn_config = Base64.decode64 vg_rb_csv[2][-1] # vg_rb_csv[2] is
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;the first server csv data&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;### 4.
+openvpn_config_file = Tempfile.new(vg_rb_csv[2][0])
+openvpn_config_file.write(openvpn_config)
+begin
+  puts &amp;quot;========================================================================&amp;quot;
+  puts &amp;quot;==&amp;gt; Use the highest score server&amp;quot;
+  puts &amp;quot;==&amp;gt; Server info:&amp;quot;
+  puts &amp;quot;    IP:#{vg_rb_csv[2][1]} Country:#{vg_rb_csv[2][5]}
+        Ping:#{vg_rb_csv[2][3]}ms Speed:#{vg_rb_csv[2][4][0..3].to_i/100.0}Mbps
+        Score:#{vg_rb_csv[2][2]}&amp;quot;
+
+  openvpn_cmd = &amp;quot;sudo openvpn --config #{openvpn_config_file.path}&amp;quot;
+  puts &amp;quot;==&amp;gt; Run openvpn and use vpngate openvpn config file at
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;#{openvpn_config_file.path}&amp;rdquo;
+      puts openvpn_cmd
+      system(openvpn_cmd, out: $stdout, err: :out)
+    ensure
+      openvpn_config_file.close
+      openvpn_config_file.unlink
+    end&lt;/p&gt;
+
+&lt;h1 id=&#34;example-a-id-sec-2-name-sec-2-a:eb18c4e37c3842e712df167450d44783&#34;&gt;Example&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;==&amp;gt; Downloading vpngate csv from http://www.vpngate.net/api/iphone/
+  % Total    % Received % Xferd  Average Speed   Time    Time
+  Time  Current
+  Left  Speed
+  100 1105k  100 1105k    0     0   583k      0  0:00:01  0:00:01 --:--:--  584k
+==&amp;gt; Successfully download
+========================================================================
+==&amp;gt; Use the highest score server
+==&amp;gt; Server info:
+    IP:118.108.100.149 Country:Japan Ping:47ms Speed:51.95Mbps
+Score:536155
+==&amp;gt; Run openvpn and use vpngate openvpn config file at
+/tmp/vg198681512520131020-16665-13qjlwe
+ sudo openvpn --config /tmp/vg198681512520131020-16665-13qjlwe
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ruby block match and jump (emacs evil-mode)</title>
+      <link>http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/</link>
+      <pubDate>Sat, 19 Oct 2013 19:55:09 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/</guid>
+      <description>
+
+&lt;h1 id=&#34;description-a-id-sec-1-name-sec-1-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Description&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;Emacs evil-mode &lt;code&gt;%&lt;/code&gt; 功能加上 Ruby block 的配對，例如將光標放在 &lt;code&gt;class
+Foo&lt;/code&gt; 上後鍵入 &lt;code&gt;%&lt;/code&gt; 可以跳轉至相符的 &lt;code&gt;end&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h1 id=&#34;example-a-id-sec-2-name-sec-2-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Example&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/evil-ruby-jump-item.gif&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;source-code-a-id-sec-3-name-sec-3-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Source Code&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;;; Require package: (evil)
+(evil-define-motion evil-ruby-jump-item (count)
+  :jump t
+  :type inclusive
+  (cond ((string-match ruby-block-beg-re (current-word))
+         (ruby-end-of-block count))
+        ((string-match ruby-block-end-re (current-word))
+         (ruby-beginning-of-block count))
+        (t
+         (evil-jump-item count))))
+
+(add-hook &#39;ruby-mode-hook
+          (lambda ()
+            (define-key evil-normal-state-local-map &amp;quot;%&amp;quot; &#39;evil-ruby-jump-item)
+            (define-key evil-motion-state-local-map &amp;quot;%&amp;quot; &#39;evil-ruby-jump-item)))
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>帕斯卡三角形 (Ruby)</title>
+      <link>http://xuhaojun.github.io/2013/09/03/pascal-triangle-ruby/</link>
+      <pubDate>Tue, 03 Sep 2013 19:37:52 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/09/03/pascal-triangle-ruby/</guid>
+      <description>
+
+&lt;h1 id=&#34;帕斯卡三角形-a-id-sec-1-name-sec-1-a:0638fe5e5d536e297a6ec80324afce45&#34;&gt;帕斯卡三角形&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/PascalTriangleAnimated2.gif/210px-PascalTriangleAnimated2.gif&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def pascal_triangle(n, i = 2, result = [[1], [1,1]])
+  if n == 1
+    [[1]]
+  elsif n == 2
+    [[1], [1,1]]
+  elsif i == n
+    result
+  else
+    current_row = [1]
+    (i-1).times do |n|
+      current_row &amp;lt;&amp;lt; (result[i-1][n] + result[i-1][n+1])
+    end
+    current_row &amp;lt;&amp;lt; 1
+
+    pascal_triangle(n, i+1, result &amp;lt;&amp;lt; current_row)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Image reference: &lt;a href=&#34;https://zh.wikipedia.org/zh-tw/%25E6%259D%25A8%25E8%25BE%2589%25E4%25B8%2589%25E8%25A7%2592%25E5%25BD%25A2&#34;&gt;Pascal-triangle
+Wikipedia-chi&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;output-a-id-sec-2-name-sec-2-a:0638fe5e5d536e297a6ec80324afce45&#34;&gt;Output&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;pst = pascal_triangle(7)
+
+puts pst.pretty_inspect
+
+=begin
+[[1],
+ [1, 1],
+ [1, 2, 1],
+ [1, 3, 3, 1],
+ [1, 4, 6, 4, 1],
+ [1, 5, 10, 10, 5, 1],
+ [1, 6, 15, 20, 15, 6, 1]]
+=&amp;gt; nil
+=end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;check-a-id-sec-3-name-sec-3-a:0638fe5e5d536e297a6ec80324afce45&#34;&gt;Check&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;pst.map {|row| row.reduce(:+) == 2 ** (row.length - 1) }
+# =&amp;gt; [true, true, true, true, true, true, true]
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Emacs 自動縮進 Ruby&#39;s if-else</title>
+      <link>http://xuhaojun.github.io/2013/08/29/emacs-ruby-indent/</link>
+      <pubDate>Thu, 29 Aug 2013 20:03:03 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/29/emacs-ruby-indent/</guid>
+      <description>
+
+&lt;h1 id=&#34;problem-a-id-sec-1-name-sec-1-a:cd231999e942cfc93b0759bc58b7811b&#34;&gt;Problem&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;當我打完 elsif 時，他應該要縮進到 if 那邊。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if
+   elsif # Should indent this line
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;正確的 if-else 縮進：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if 1&amp;gt;2
+  #....
+elsif
+  #...
+else
+  #...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很明顯 else 和 elsif 是向 if 對齊縮進的。&lt;/p&gt;
+
+&lt;h1 id=&#34;solution-a-id-sec-2-name-sec-2-a:cd231999e942cfc93b0759bc58b7811b&#34;&gt;Solution&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;發現在 Emacs 上沒有自動縮進 Ruby 的 if-else 語法後，去試了一下 vim
+發現可以處理 if-else
+的縮進，當然得跟上！&lt;/p&gt;
+
+&lt;p&gt;最簡單的方法就是在按 &lt;code&gt;space&lt;/code&gt; 時，檢查前一個 word 是不是 &lt;code&gt;else&lt;/code&gt; 或
+&lt;code&gt;elsif&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;首先我有用 ruby-electric，這東西會在你打 &lt;code&gt;if&lt;/code&gt; 或 &lt;code&gt;class&lt;/code&gt; 等等
+自動產生一個 &lt;code&gt;end&lt;/code&gt;
+在下行，他是依據你打 &lt;code&gt;if&amp;lt;space&amp;gt;&lt;/code&gt; 的 &lt;code&gt;&amp;lt;space&amp;gt;&lt;/code&gt; 時會觸發產生一個 &lt;code&gt;end&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;&amp;lt;space&amp;gt;&lt;/code&gt; 對應到 ruby-electric-space 這個 funciton，我從 ruby-electric
+裡複製過來，很像不應該這樣做，不過不管了。&lt;/p&gt;
+
+&lt;p&gt;以下是修改過後的版本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defun ruby-electric-space (arg)
+  (interactive &amp;quot;P&amp;quot;)
+  (self-insert-command (prefix-numeric-value arg))
+  (cond ((ruby-electric-space-can-be-expanded-p)
+         (save-excursion
+           (ruby-indent-line t)
+           (newline)
+           (ruby-electric-insert-end)))
+        ((ruby-electric-space-can-be-indent-p) (ruby-indent-line t))))
+
+(defun ruby-electric-space-can-be-indent-p ()
+  (and (ruby-electric-code-at-point-p)
+       (ruby-electric-matching-word-p)))
+
+(defun ruby-electric-matching-word-p ()
+  (save-excursion
+    (backward-word)
+    (string-match &amp;quot;\\(\\&amp;lt;else\\&amp;gt;\\|\\&amp;lt;elsif\\&amp;gt;\\)&amp;quot; (current-word))))
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>阿姆斯壯數 (Ruby)</title>
+      <link>http://xuhaojun.github.io/2013/08/27/armstrong-num-ruby/</link>
+      <pubDate>Tue, 27 Aug 2013 19:32:07 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/27/armstrong-num-ruby/</guid>
+      <description>
+
+&lt;p&gt;寫一些簡單的演算法來熟悉 Ruby。&lt;/p&gt;
+
+&lt;h1 id=&#34;armstrong-number-a-id-sec-1-name-sec-1-a:6486ff3a0a39604736e43d2cf3c6c774&#34;&gt;Armstrong number&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%25E6%25B0%25B4%25E4%25BB%2599%25E8%258A%25B1%25E6%2595%25B0&#34;&gt;阿姆斯壯數 -
+WiKi&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;指一 N 位数，其各个数之 N 次方和等于该数。&lt;/p&gt;
+
+&lt;p&gt;例如 153、370、371 及 407
+就是三位數的水仙花数，其各个数之立方和等于该数：&lt;/p&gt;
+
+&lt;h1 id=&#34;source-code:6486ff3a0a39604736e43d2cf3c6c774&#34;&gt;Source code&lt;/h1&gt;
+
+&lt;p&gt;不曉得型別轉來轉去算不算壞習慣&amp;#x2026;。&lt;/p&gt;
+
+&lt;p&gt;有用到 lazy 這個 enumerator，如果沒用 lazy 的話就會當在那裡了，lazy
+感覺很像是一個一個求值後在判斷在存值，沒有使用的話則一次全部求值後在做事。&lt;/p&gt;
+
+&lt;p&gt;懶的想怎麼做優化了，怕到時候改一改可讀性就沒現在這個好了，先留這個作筆記。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class Integer
+  def armstrong_num? # may be have more better name..
+    sum = 0
+    digits = self.to_s.length
+    digits.times { |n| sum += (self.to_s[n].to_i ** digits) }
+    return sum == self
+  end
+end
+
+# 三位數的所有阿姆斯壯數
+(100...1000).select{ |x| x.armstrong_num? }
+# =&amp;gt; [153, 370, 371, 407]
+
+# 四位數的第一個阿姆斯壯數
+(1000...10000).select{ |x| x.armstrong_num? }.first(1)
+# =&amp;gt; [1634]
+
+# 前 15 個阿姆斯壯數
+(1..Float::INFINITY).lazy.select{ |x| x.armstrong_num? }.first(15)
+# =&amp;gt; [1, 2, 3, 4, 5, 6, 7, 8, 9, 153, 370, 371, 407, 1634, 8208]
+
+# 前三個阿姆斯壯數，從三位數開始
+(100..Float::INFINITY).lazy.select{ |x| x.armstrong_num? }.first(3)
+# =&amp;gt; [153, 370, 371]
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>產生一組不重複整數的集合(Ruby)</title>
+      <link>http://xuhaojun.github.io/2013/08/25/gen-uniq-nums-ruby/</link>
+      <pubDate>Sun, 25 Aug 2013 04:10:14 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/25/gen-uniq-nums-ruby/</guid>
+      <description>
+
+&lt;p&gt;先用 Ruby 寫以前上 Android 中猜數字範例中用到的算法：&lt;/p&gt;
+
+&lt;h1 id=&#34;normal-way-1-a-id-sec-1-name-sec-1-a:813bc76884f654364af38e575809aea8&#34;&gt;Normal Way - 1&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;def get_uniq_nums(size, range)
+  ary = []
+  begin
+    r = rand(range)
+    if ary.member?(r)
+      next
+    else
+      ary &amp;lt;&amp;lt; r
+    end
+  end while( ary.length &amp;lt; size )
+  return ary
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;記得之前教的不是用 member
+的方法來判斷，當初沒有提到用到集合的概念寫，好像是檢查前面幾個數字的迴圈吧，那陀
+Java 程式碼已經忘光了。&lt;/p&gt;
+
+&lt;p&gt;這是產生 4 個不重複 1~9 的數字，放在一個陣列裡面&lt;br /&gt;
+&lt;code&gt;get_uniq_nums(4, (1...10))&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;變成一個數字，先 join 把他連在一起變成字串，在轉回數字。&lt;br /&gt;
+&lt;code&gt;get_uniq_nums(4, (1...10)).join.to_i&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;normal-way-2-a-id-sec-2-name-sec-2-a:813bc76884f654364af38e575809aea8&#34;&gt;Normal Way - 2&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;def get_uniq_nums(size, range, ary = [])
+  if size.zero?
+    ary
+  elsif ary.member?(r = rand(range))
+    get_uniq_nums(size , range, ary)
+  else
+    get_uniq_nums(size - 1, range, (ary &amp;lt;&amp;lt; r))
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;試了別種寫法，很像叫尾遞迴的方法，跟普通遞迴好像差別在多用一個參數在存值，在
+Emacs lisp
+很像還要多用一個函數才能不影響原來的接口。順便一提，弄不出一個函數的普通遞迴方法。&lt;/p&gt;
+
+&lt;p&gt;以下是普通遞迴版失敗品：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def get_uniq_nums(size, range)
+  if size.zero?
+    []
+  elsif get_uniq_nums(size, range).member?(r = rand(range))
+    get_uniq_nums(size, range)
+  else
+    get_uniq_nums(size - 1, range) &amp;lt;&amp;lt; r
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;set-way-a-id-sec-3-name-sec-3-a:813bc76884f654364af38e575809aea8&#34;&gt;Set Way&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;放狗一搜，找到了其他方法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/119107/how-do-i-generate-a-list-of-n-unique-random-numbers-in-ruby&#34;&gt;How do I generate a list of n unique random numbers in
+Ruby?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Set implements a collection of unordered values with no duplicates.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;set&#39;
+
+def rand_n(n, max)
+  randoms = Set.new
+  loop do
+    randoms &amp;lt;&amp;lt; rand(max)
+    return randoms.to_a if randoms.size &amp;gt;= n
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好吧&amp;#x2026;原來 Ruby 內建了 Set
+的資料型態，第一次發現有內建集合的程式語言，當初應該要想到 Java
+中有沒有這東西。
+上面是用集合內不重複元素的特性，所以在加入元素時天生就會檢查有沒有重複，最後在轉成陣列。&lt;/p&gt;
+
+&lt;p&gt;看來以後可以玩玩看交集、聯集、差集之類的，還有子集合判斷之類的。&lt;/p&gt;
+
+&lt;h1 id=&#34;range-way-1-a-id-sec-4-name-sec-4-a:813bc76884f654364af38e575809aea8&#34;&gt;Range Way - 1&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;A Range represents an interval&amp;#x2014;a set of values with a beginning
+and
+an end.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;range = 0...1000000
+how_many = 10000
+
+# first way
+# Array::sample Choose a random element or n random elements from
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;the array.
+    range.to_a.sample(how_many)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# second way
+(range).sort_by{rand}[0...how_many]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;直接從 Range 裡用內建的方法隨機挑，行數完敗上面那兩個。&lt;/p&gt;
+
+&lt;h1 id=&#34;range-way-2-a-id-sec-5-name-sec-5-a:813bc76884f654364af38e575809aea8&#34;&gt;Range Way - 2&lt;a id=&#34;sec-5&#34; name=&#34;sec-5&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;突然想到如果要在生成時就篩選掉不想要數字的話，要怎麼做？&lt;/p&gt;
+
+&lt;p&gt;仔細一想很簡單，直接在在範圍裡改。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Delete 2 from the range of rand
+(1..4).reject { |x| x==2 }.to_a.sample(how_many)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;benchmark-them-a-id-sec-6-name-sec-6-a:813bc76884f654364af38e575809aea8&#34;&gt;Benchmark them&lt;a id=&#34;sec-6&#34; name=&#34;sec-6&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&#34;part-1-a-id-sec-6-1-name-sec-6-1-a:813bc76884f654364af38e575809aea8&#34;&gt;Part 1&lt;a id=&#34;sec-6-1&#34; name=&#34;sec-6-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;benchmark&#39;
+
+range = 0...1000000
+how_many = 10000
+
+## Range way - 1
+Benchmark.realtime do
+  range.to_a.sample(how_many)
+end
+# =&amp;gt; 0.076334817
+
+## Set Way
+Benchmark.realtime do
+  rand_n(how_many, range)
+end
+# =&amp;gt; 0.01060032
+
+## Normal way - 1
+Benchmark.realtime do
+  get_uniq_nums(how_many, range)
+end
+# =&amp;gt; 3.565261117
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;part-2-a-id-sec-6-2-name-sec-6-2-a:813bc76884f654364af38e575809aea8&#34;&gt;Part 2&lt;a id=&#34;sec-6-2&#34; name=&#34;sec-6-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;range = 0...1000000
+how_many = 1000000
+
+## Set Way
+Benchmark.realtime do
+  rand_n(how_many, range)
+end
+# =&amp;gt; 11.305328646
+
+## Range way - 1
+Benchmark.realtime do
+  range.to_a.sample(how_many)
+end
+# =&amp;gt; 0.112987391
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Range Way 完敗。 還有沒有實現 Set Way 和 Normal Way 的篩選的功能。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Evil Mode on xublog</title>
+    <link>http://xuhaojun.github.io/tags/evil-mode/</link>
+    <description>Recent content in Evil Mode on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 19 Oct 2013 19:55:09 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/evil-mode/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Ruby block match and jump (emacs evil-mode)</title>
+      <link>http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/</link>
+      <pubDate>Sat, 19 Oct 2013 19:55:09 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/</guid>
+      <description>
+
+&lt;h1 id=&#34;description-a-id-sec-1-name-sec-1-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Description&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;Emacs evil-mode &lt;code&gt;%&lt;/code&gt; 功能加上 Ruby block 的配對，例如將光標放在 &lt;code&gt;class
+Foo&lt;/code&gt; 上後鍵入 &lt;code&gt;%&lt;/code&gt; 可以跳轉至相符的 &lt;code&gt;end&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h1 id=&#34;example-a-id-sec-2-name-sec-2-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Example&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://xuhaojun.github.io/img/evil-ruby-jump-item.gif&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;source-code-a-id-sec-3-name-sec-3-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Source Code&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;;; Require package: (evil)
+(evil-define-motion evil-ruby-jump-item (count)
+  :jump t
+  :type inclusive
+  (cond ((string-match ruby-block-beg-re (current-word))
+         (ruby-end-of-block count))
+        ((string-match ruby-block-end-re (current-word))
+         (ruby-beginning-of-block count))
+        (t
+         (evil-jump-item count))))
+
+(add-hook &#39;ruby-mode-hook
+          (lambda ()
+            (define-key evil-normal-state-local-map &amp;quot;%&amp;quot; &#39;evil-ruby-jump-item)
+            (define-key evil-motion-state-local-map &amp;quot;%&amp;quot; &#39;evil-ruby-jump-item)))
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

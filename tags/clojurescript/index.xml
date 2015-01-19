@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Clojurescript on xublog</title>
+    <link>http://xuhaojun.github.io/tags/clojurescript/</link>
+    <description>Recent content in Clojurescript on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 16 May 2014 19:13:28 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/clojurescript/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Clojure/Clojurescript Emacs 開發環境</title>
+      <link>http://xuhaojun.github.io/2014/05/16/writing-clojure-in-emacs/</link>
+      <pubDate>Fri, 16 May 2014 19:13:28 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/16/writing-clojure-in-emacs/</guid>
+      <description>
+
+&lt;p&gt;簡單的 clojure/clojurescript 開發環境。&lt;/p&gt;
+
+&lt;h1 id=&#34;基本功能安裝-a-id-sec-1-name-sec-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;基本功能安裝&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;推薦從 emacs 24 起，自帶的 package 系統來安裝。&lt;/p&gt;
+
+&lt;p&gt;首先加入更多 package 的安裝來源 &lt;a href=&#34;http://melpa.milkbox.net&#34;&gt;melpa&lt;/a&gt;
+&lt;a href=&#34;http://marmalade-repo.org/&#34;&gt;marmalade&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defvar marmalade &#39;(&amp;quot;marmalade&amp;quot; .  &amp;quot;http://marmalade-repo.org/packages/&amp;quot;))
+(defvar gnu &#39;(&amp;quot;gnu&amp;quot; . &amp;quot;http://elpa.gnu.org/packages/&amp;quot;))
+(defvar melpa &#39;(&amp;quot;melpa&amp;quot; . &amp;quot;http://melpa.milkbox.net/packages/&amp;quot;))
+(add-to-list &#39;package-archives marmalade)
+(add-to-list &#39;package-archives melpa t)
+(package-initialize)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;安裝 clojure-mode：
+&lt;code&gt;M-x package-install&lt;/code&gt; &lt;code&gt;clojure-mode&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;這樣就有基本的代碼高亮和縮進功能了。&lt;/p&gt;
+
+&lt;h1 id=&#34;強力插件-cider-clojure-ide-and-repl-a-id-sec-2-name-sec-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;強力插件: CIDER (Clojure IDE and REPL)&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/clojure-emacs/cider&#34;&gt;CIDER-github&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;安裝-a-id-sec-2-1-name-sec-2-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;安裝&lt;a id=&#34;sec-2-1&#34; name=&#34;sec-2-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;M-x package-install&lt;/code&gt; &lt;code&gt;cider&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;repl-交互式編程環境-a-id-sec-2-2-name-sec-2-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;REPL (交互式編程環境)&lt;a id=&#34;sec-2-2&#34; name=&#34;sec-2-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%25E8%25AF%25BB%25E5%258F%2596%25EF%25B9%25A3%25E6%25B1%2582%25E5%2580%25BC%25EF%25B9%25A3%25E8%25BE%2593%25E5%2587%25BA%25E5%25BE%25AA%25E7%258E%25AF&#34;&gt;REPL-wiki&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;安裝-a-id-sec-2-2-1-name-sec-2-2-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;安裝：&lt;a id=&#34;sec-2-2-1&#34; name=&#34;sec-2-2-1&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;推薦使用&lt;a href=&#34;http://leiningen.org/&#34;&gt;leiningen&lt;/a&gt; 來管理你的 clojure project.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;lein new myproject&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;安裝 &lt;a href=&#34;https://github.com/clojure-emacs/cider-nrepl&#34;&gt;cider-nrepl&lt;/a&gt;
+在 &lt;code&gt;~/.lein/profiles.clj&lt;/code&gt; 加入以下兩行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{:user
+ {:plugins [[cider/cider-nrepl &amp;quot;0.7.0-SNAPSHOT&amp;quot;]]}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;使用-a-id-sec-2-2-2-name-sec-2-2-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;使用：&lt;a id=&#34;sec-2-2-2&#34; name=&#34;sec-2-2-2&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;接下來在你的 emacs 執行 &lt;code&gt;M-x cider-jack-in&lt;/code&gt;
+沒有意外的話，會出現一個 repl 的 buffer，關掉是 &lt;code&gt;cider-quit&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;幾個必用的 emacs function , 把他們綁在你喜歡的 key 上吧。
+&lt;code&gt;cider-eval-last-sexp&lt;/code&gt; , &lt;code&gt;cider-eval-defun-at-point&lt;/code&gt; ,
+&lt;code&gt;cider-switch-to-repl-buffer&lt;/code&gt; , &lt;code&gt;cider-jump&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;browser-repl-for-clojurescript-a-id-sec-2-3-name-sec-2-3-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;Browser REPL (for clojurescript)&lt;a id=&#34;sec-2-3&#34; name=&#34;sec-2-3&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/cemerick/austin&#34;&gt;Austin-github&lt;/a&gt;
+&lt;a href=&#34;https://github.com/cemerick/austin/tree/master/browser-connected-repl-sample&#34;&gt;專案範例&lt;/a&gt;
+在 &lt;code&gt;~/.lein/profiles.clj&lt;/code&gt; 加入以下兩行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{:user
+ {:plugins [[com.cemerick/austin &amp;quot;0.1.4&amp;quot;]]}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在你的 cljs 檔案裡的 namespace 新增：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(:require [clojure.browser.repl])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在 REPL 的環境裡：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(def repl-env (reset! cemerick.austin.repls/browser-repl-env
+                      (cemerick.austin/repl-env)))
+(cemerick.austin.repls/cljs-repl repl-env)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下來在新的 REPL 環境裡：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(js/alert &amp;quot;hello browser&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你的 browser 應該會有反應。&lt;/p&gt;
+
+&lt;h2 id=&#34;自動補全-a-id-sec-2-4-name-sec-2-4-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;自動補全&lt;a id=&#34;sec-2-4&#34; name=&#34;sec-2-4&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/company-mode/company-mode&#34;&gt;company-mode-github&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;安裝-a-id-sec-2-4-1-name-sec-2-4-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;安裝：&lt;a id=&#34;sec-2-4-1&#34; name=&#34;sec-2-4-1&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;M-x package-install&lt;/code&gt; &lt;code&gt;company&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;開啟：
+&lt;code&gt;M-x global-company-mode&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;預設開啟：在你的 init.el 加入這行。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(global-company-mode)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;使用-a-id-sec-2-4-2-name-sec-2-4-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;使用：&lt;a id=&#34;sec-2-4-2&#34; name=&#34;sec-2-4-2&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;必須在你的 repl 開啟的時候才有效！&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;M-n&lt;/code&gt;, &lt;code&gt;M-p&lt;/code&gt; 上下選擇候選鍵。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;//company-mode.github.io/images/company-elisp.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;其他插件推薦-a-id-sec-3-name-sec-3-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;其他插件推薦&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/jlr/rainbow-delimiters&#34;&gt;rainbow-delimiters&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gitorious.org/evil/pages/Home&#34;&gt;evil&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.emacswiki.org/emacs/InteractivelyDoThings&#34;&gt;ido&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;截圖-a-id-sec-4-name-sec-4-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;截圖&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/emacs-clojure-development.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>黑白棋 (Clojurescript)</title>
+      <link>http://xuhaojun.github.io/2014/05/11/reversi-game-clojurescript/</link>
+      <pubDate>Sun, 11 May 2014 19:10:27 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/11/reversi-game-clojurescript/</guid>
+      <description>
+
+&lt;p&gt;一個簡單的單機網頁(html5)黑白棋遊戲。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://xuhaojun.github.io/reversi/&#34;&gt;Try it Online&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/XuHaoJun/reversi&#34;&gt;Source code&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;實現算法-a-id-sec-1-name-sec-1-a:62581f113666cc3902cd87e363146d86&#34;&gt;實現算法&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;每次下棋對其八個鄰近方格做掃描，如果是相反顏色的棋子，就往其方位向前找到另一個相同顏色的棋子，若有找到則翻棋，沒有則遍歷下一個方位。&lt;/p&gt;
+
+&lt;h1 id=&#34;電腦-ai-下棋算法-a-id-sec-2-name-sec-2-a:62581f113666cc3902cd87e363146d86&#34;&gt;電腦(AI)下棋算法&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;暫時隨機，在看用哪種好。&lt;/p&gt;
+
+&lt;h1 id=&#34;clojurescript-使用心得-a-id-sec-3-name-sec-3-a:62581f113666cc3902cd87e363146d86&#34;&gt;Clojurescript 使用心得&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;一堆括號阿！！每次都要讓函數回傳有意義的值，Debug
+起來也很容易，一個函數影響的範圍就只有他的參數而已，沒有隱示參數(全域變數、成員變數)的話就很好測試，每個函數就盡量小小的做一件事，不過到使用
+&lt;a href=&#34;https://github.com/photonstorm/phaser&#34;&gt;phaser&lt;/a&gt; (javascript html5 game
+framework)那層就一堆副作用囉!(set! xxx yyy)。&lt;/p&gt;
+
+&lt;h1 id=&#34;截圖-a-id-sec-4-name-sec-4-a:62581f113666cc3902cd87e363146d86&#34;&gt;截圖&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/reversi-game.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

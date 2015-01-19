@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on xublog</title>
+    <link>http://xuhaojun.github.io/tags/blog/</link>
+    <description>Recent content in Blog on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 23 Aug 2013 19:57:41 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Org-mode &#43; Octopress &#43; Github 來搭建 Blog</title>
+      <link>http://xuhaojun.github.io/2013/08/23/emacs-org-octopress/</link>
+      <pubDate>Fri, 23 Aug 2013 19:57:41 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/23/emacs-org-octopress/</guid>
+      <description>
+
+&lt;ul&gt;
+&lt;li&gt;優點
+
+&lt;ul&gt;
+&lt;li&gt;免費網域、免費託管、免費流量&lt;/li&gt;
+&lt;li&gt;版本管理，不用擔心備份！&lt;/li&gt;
+&lt;li&gt;Org-mode or Markdown 撰寫效率好&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;缺點
+
+&lt;ul&gt;
+&lt;li&gt;技術門檻要求較高&lt;br /&gt;
+    需要懂一些 Git, Github, Org-mode 或 Makrdown，更進階要客製化
+Blog 的話，可能還要
+懂些許 Ruby (jekyll)&lt;/li&gt;
+&lt;li&gt;Org-mode 的 code block 沒有 markdown&amp;rsquo;s code block 的 title url
+功能。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;org-mode-a-id-sec-1-name-sec-1-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Org-mode&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Org mode is for keeping notes, maintaining TODO lists, planning
+projects, and
+authoring documents with a fast and effective plain-text system.&lt;br /&gt;
+&lt;strong&gt;&lt;a href=&#34;http://orgmode.org/&#34;&gt;http://orgmode.org/&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Org-mode 是建立於 Emacs(編輯器)
+之上的插件，是一種輕量級的標記語言可以用來做時間管理、筆記、生成 Html
+&amp;#x2026; ，同類型的流行的還有 Markdown，這篇文章基本上就是
+Emacs + org-mode 寫的，之後在透過插件
+&lt;a href=&#34;https://github.com/yoshinari-nomura/org-octopress&#34;&gt;org-octopress&lt;/a&gt;
+生成給 Octopress 用。&lt;/p&gt;
+
+&lt;h2 id=&#34;install-emacs-24-x-a-id-sec-1-1-name-sec-1-1-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Install Emacs(24.x)&lt;a id=&#34;sec-1-1&#34; name=&#34;sec-1-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;我只會在 Linux 平台上用 Package 裝。&lt;/p&gt;
+
+&lt;p&gt;一些流行的 Linux distribution 的 Package Manager 安裝方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pacman -S emacs          # Archlinux
+apt-get install emacs    # Ubuntu
+yum install emacs        # Fedora
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;install-org-and-org-octopress-a-id-sec-1-2-name-sec-1-2-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Install org and org-octopress&lt;a id=&#34;sec-1-2&#34; name=&#34;sec-1-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;用 Emacs 裡的 Package Manager 安裝：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# 在家目錄建一個 .emacs.d 資料夾後，在裡面建 init.el
+mkdir ~/.emacs.d
+touch ~/.emacs.d/init.el
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在 init.el 添加：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(add-to-list &#39;package-archives
+  &#39;(&amp;quot;marmalade&amp;quot; . &amp;quot;http://marmalade-repo.org/packages/&amp;quot;))
+
+(add-to-list &#39;package-archives
+  &#39;(&amp;quot;melpa&amp;quot; . &amp;quot;http://melpa.milkbox.net/packages/&amp;quot;) t)
+
+(package-initialize)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;開啟 Emacs 鍵入 &lt;code&gt;M-x package-install org RET&lt;/code&gt; ，把 org 換成
+org-octopress 後安裝。&lt;/p&gt;
+
+&lt;h2 id=&#34;org-octopress-setup-a-id-sec-1-3-name-sec-1-3-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Org-octopress Setup&lt;a id=&#34;sec-1-3&#34; name=&#34;sec-1-3&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;以下是從
+&lt;a href=&#34;https://github.com/yoshinari-nomura/org-octopress&#34;&gt;org-octopress&lt;/a&gt; 的
+README 裡擷取 Basic Settings 的片段。&lt;/p&gt;
+
+&lt;p&gt;添加在 init.el。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Emacs Settings:&lt;/p&gt;
+
+&lt;p&gt;(require &amp;lsquo;org-octopress)
+(setq org-octopress-directory-top       &amp;ldquo;~/octopress/source&amp;rdquo;)
+(setq org-octopress-directory-posts     &amp;ldquo;~/octopress/source/_posts&amp;rdquo;)
+(setq org-octopress-directory-org-top   &amp;ldquo;~/octopress/source&amp;rdquo;)
+(setq org-octopress-directory-org-posts &amp;ldquo;~/octopress/source/blog&amp;rdquo;)
+(setq org-octopress-setup-file          &amp;ldquo;~/org-sty/setupfile.org&amp;rdquo;)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Octopress Settings:&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In octopress/&lt;sub&gt;config&lt;/sub&gt;.yml, you must set the permelink
+attribute:&lt;br /&gt;
+&lt;code&gt;permalink: /blog/:year-:month-:day-:title.html&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;octopress-a-id-sec-2-name-sec-2-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Octopress&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt; 是一套 Blog 的框架，所以一開始你的
+Blog 就有一個簡潔的外觀，功能上有支援 Twitter, Facebook, Delicious
+等等，也可以用來產生靜態 Blog 後放在 Github
+上，預設是用 Markdown 來撰寫文章。&lt;/p&gt;
+
+&lt;h2 id=&#34;install-and-use-octopress-a-id-sec-2-1-name-sec-2-1-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Install and Use Octopress&lt;a id=&#34;sec-2-1&#34; name=&#34;sec-2-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;要先安裝 &lt;a href=&#34;http://www.ruby-lang.org/en/&#34;&gt;Ruby&lt;/a&gt; 和
+&lt;a href=&#34;http://gitscm.com/&#34;&gt;Git&lt;/a&gt;。&lt;br /&gt;
+官方的方法： &lt;a href=&#34;http://octopress.org/docs/setup/&#34;&gt;Octopress Setup&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;github-a-id-sec-3-name-sec-3-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Github&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;首先有個 &lt;a href=&#34;https://github.com/&#34;&gt;Github&lt;/a&gt; 的帳號後，建立一個 Repository 為
+username.github.io，之後去你的 octopress 的根目錄鍵入 &lt;code&gt;bundle exec rake
+setup_github_page&lt;/code&gt; 輸入剛剛建完給你的 url。&lt;/p&gt;
+
+&lt;p&gt;官方文檔: &lt;a href=&#34;https://help.github.com/&#34;&gt;GithubHelp&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;基本流程-a-id-sec-4-name-sec-4-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;基本流程&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;開啟 Emacs 鍵入 &lt;code&gt;M-x org-octopress RET&lt;/code&gt; ，會到 org-octopress
+的界面鍵入 &lt;code&gt;w&lt;/code&gt;
+   和標題，開始撰寫文章。&lt;/li&gt;
+&lt;li&gt;寫完後，鍵入 &lt;code&gt;C-c C-e P x octopress&lt;/code&gt; 來生成靜態網頁&lt;/li&gt;
+&lt;li&gt;在你的 octopress 根目錄鍵入 &lt;code&gt;bundle exec rake gen_deploy&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;也可以把 source branch 下 push 上去做版本管理 &lt;code&gt;git push -u origin
+source&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;文章打到一半或要做確認的時候用(需先生成靜態網頁) &lt;code&gt;bundle exec rake
+preview&lt;/code&gt; ，之後在
+&lt;a href=&#34;http://localhost:4000/&#34;&gt;http://localhost:4000/&lt;/a&gt; 可以看你的 Blog。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

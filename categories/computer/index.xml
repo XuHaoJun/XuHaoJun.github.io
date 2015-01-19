@@ -1,0 +1,1304 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Computer on xublog</title>
+    <link>http://xuhaojun.github.io/categories/computer/</link>
+    <description>Recent content in Computer on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 23 May 2014 18:45:54 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/categories/computer/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Astar Path Finding Example (C)</title>
+      <link>http://xuhaojun.github.io/2014/05/23/astar-c/</link>
+      <pubDate>Fri, 23 May 2014 18:45:54 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/23/astar-c/</guid>
+      <description>
+
+&lt;p&gt;在學校出了個需要寫尋路的期末作業，說實話大一只學過 C++
+，到現在才發覺自己居然沒有認真學過
+C，所以花了三天的時間寫出來能過關的作業：
+&lt;a href=&#34;https://github.com/XuHaoJun/astar-c&#34;&gt;astar-c&lt;/a&gt; 。&lt;/p&gt;
+
+&lt;h1 id=&#34;作業介紹-a-id-sec-1-name-sec-1-a:e38a197891fd8de86956c2fd27369d1e&#34;&gt;作業介紹：&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;地圖初始大小為 20x20 的矩形，人物起始座標是在 &lt;code&gt;(0, 0)&lt;/code&gt; ，分別要照順序走
+&lt;code&gt;((10,
+10), (5, 5), (15, 15))&lt;/code&gt; 這個路徑，且不能重複走兩次，像是你直接斜著走到
+&lt;code&gt;(10,
+10)&lt;/code&gt; 的話就會經過 &lt;code&gt;(5, 5)&lt;/code&gt; 就不符合作業要求了，之後在地圖上隨機放 3~5 個
+2x2
+的矩形方塊作為障礙物，此障礙物不能在初始點和路徑上，並且要有方法繞過障礙物，若路徑完全被擋死請顯示出來，顯示要求不拘（我是每走一步就印出整張地圖和座標訊息）。&lt;/p&gt;
+
+&lt;h1 id=&#34;算法介紹-a-id-sec-2-name-sec-2-a:e38a197891fd8de86956c2fd27369d1e&#34;&gt;算法介紹&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.policyalmanac.org/games/aStarTutorial.htm&#34;&gt;A* Pathfinding for
+Beginners&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;我 Astar 的算法是從上面這個網站學到的，如果你是搜尋 Astar
+到此文章的，強烈建議你看第一手原文，不要看我這殘缺二手中文！&lt;/p&gt;
+
+&lt;p&gt;簡而言之就是每走一步就對周遭的格子進行估值，然後從中選出最適合的格子，然後反覆直到目的或沒路徑。&lt;/p&gt;
+
+&lt;h1 id=&#34;用-c-的心得-a-id-sec-3-name-sec-3-a:e38a197891fd8de86956c2fd27369d1e&#34;&gt;用 C 的心得&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;根本惡夢阿，釋放錯記憶體，指標指錯地方，用到很多 &lt;code&gt;Linked List&lt;/code&gt;
+的結構，每次循環這個結構都要開個 temp 變量，Debug De
+到死，現在那個寫出來的作業懶的和手動釋放記憶體爭鬥了，等忙完其他事在開始重寫那部份吧。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Clojure/Clojurescript Emacs 開發環境</title>
+      <link>http://xuhaojun.github.io/2014/05/16/writing-clojure-in-emacs/</link>
+      <pubDate>Fri, 16 May 2014 19:13:28 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/16/writing-clojure-in-emacs/</guid>
+      <description>
+
+&lt;p&gt;簡單的 clojure/clojurescript 開發環境。&lt;/p&gt;
+
+&lt;h1 id=&#34;基本功能安裝-a-id-sec-1-name-sec-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;基本功能安裝&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;推薦從 emacs 24 起，自帶的 package 系統來安裝。&lt;/p&gt;
+
+&lt;p&gt;首先加入更多 package 的安裝來源 &lt;a href=&#34;http://melpa.milkbox.net&#34;&gt;melpa&lt;/a&gt;
+&lt;a href=&#34;http://marmalade-repo.org/&#34;&gt;marmalade&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defvar marmalade &#39;(&amp;quot;marmalade&amp;quot; .  &amp;quot;http://marmalade-repo.org/packages/&amp;quot;))
+(defvar gnu &#39;(&amp;quot;gnu&amp;quot; . &amp;quot;http://elpa.gnu.org/packages/&amp;quot;))
+(defvar melpa &#39;(&amp;quot;melpa&amp;quot; . &amp;quot;http://melpa.milkbox.net/packages/&amp;quot;))
+(add-to-list &#39;package-archives marmalade)
+(add-to-list &#39;package-archives melpa t)
+(package-initialize)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;安裝 clojure-mode：
+&lt;code&gt;M-x package-install&lt;/code&gt; &lt;code&gt;clojure-mode&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;這樣就有基本的代碼高亮和縮進功能了。&lt;/p&gt;
+
+&lt;h1 id=&#34;強力插件-cider-clojure-ide-and-repl-a-id-sec-2-name-sec-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;強力插件: CIDER (Clojure IDE and REPL)&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/clojure-emacs/cider&#34;&gt;CIDER-github&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;安裝-a-id-sec-2-1-name-sec-2-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;安裝&lt;a id=&#34;sec-2-1&#34; name=&#34;sec-2-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;M-x package-install&lt;/code&gt; &lt;code&gt;cider&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;repl-交互式編程環境-a-id-sec-2-2-name-sec-2-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;REPL (交互式編程環境)&lt;a id=&#34;sec-2-2&#34; name=&#34;sec-2-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%25E8%25AF%25BB%25E5%258F%2596%25EF%25B9%25A3%25E6%25B1%2582%25E5%2580%25BC%25EF%25B9%25A3%25E8%25BE%2593%25E5%2587%25BA%25E5%25BE%25AA%25E7%258E%25AF&#34;&gt;REPL-wiki&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;安裝-a-id-sec-2-2-1-name-sec-2-2-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;安裝：&lt;a id=&#34;sec-2-2-1&#34; name=&#34;sec-2-2-1&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;推薦使用&lt;a href=&#34;http://leiningen.org/&#34;&gt;leiningen&lt;/a&gt; 來管理你的 clojure project.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;lein new myproject&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;安裝 &lt;a href=&#34;https://github.com/clojure-emacs/cider-nrepl&#34;&gt;cider-nrepl&lt;/a&gt;
+在 &lt;code&gt;~/.lein/profiles.clj&lt;/code&gt; 加入以下兩行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{:user
+ {:plugins [[cider/cider-nrepl &amp;quot;0.7.0-SNAPSHOT&amp;quot;]]}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;使用-a-id-sec-2-2-2-name-sec-2-2-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;使用：&lt;a id=&#34;sec-2-2-2&#34; name=&#34;sec-2-2-2&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;接下來在你的 emacs 執行 &lt;code&gt;M-x cider-jack-in&lt;/code&gt;
+沒有意外的話，會出現一個 repl 的 buffer，關掉是 &lt;code&gt;cider-quit&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;幾個必用的 emacs function , 把他們綁在你喜歡的 key 上吧。
+&lt;code&gt;cider-eval-last-sexp&lt;/code&gt; , &lt;code&gt;cider-eval-defun-at-point&lt;/code&gt; ,
+&lt;code&gt;cider-switch-to-repl-buffer&lt;/code&gt; , &lt;code&gt;cider-jump&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;browser-repl-for-clojurescript-a-id-sec-2-3-name-sec-2-3-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;Browser REPL (for clojurescript)&lt;a id=&#34;sec-2-3&#34; name=&#34;sec-2-3&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/cemerick/austin&#34;&gt;Austin-github&lt;/a&gt;
+&lt;a href=&#34;https://github.com/cemerick/austin/tree/master/browser-connected-repl-sample&#34;&gt;專案範例&lt;/a&gt;
+在 &lt;code&gt;~/.lein/profiles.clj&lt;/code&gt; 加入以下兩行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{:user
+ {:plugins [[com.cemerick/austin &amp;quot;0.1.4&amp;quot;]]}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在你的 cljs 檔案裡的 namespace 新增：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(:require [clojure.browser.repl])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在 REPL 的環境裡：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(def repl-env (reset! cemerick.austin.repls/browser-repl-env
+                      (cemerick.austin/repl-env)))
+(cemerick.austin.repls/cljs-repl repl-env)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下來在新的 REPL 環境裡：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(js/alert &amp;quot;hello browser&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你的 browser 應該會有反應。&lt;/p&gt;
+
+&lt;h2 id=&#34;自動補全-a-id-sec-2-4-name-sec-2-4-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;自動補全&lt;a id=&#34;sec-2-4&#34; name=&#34;sec-2-4&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/company-mode/company-mode&#34;&gt;company-mode-github&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;安裝-a-id-sec-2-4-1-name-sec-2-4-1-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;安裝：&lt;a id=&#34;sec-2-4-1&#34; name=&#34;sec-2-4-1&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;M-x package-install&lt;/code&gt; &lt;code&gt;company&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;開啟：
+&lt;code&gt;M-x global-company-mode&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;預設開啟：在你的 init.el 加入這行。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(global-company-mode)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;使用-a-id-sec-2-4-2-name-sec-2-4-2-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;使用：&lt;a id=&#34;sec-2-4-2&#34; name=&#34;sec-2-4-2&#34;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;必須在你的 repl 開啟的時候才有效！&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;M-n&lt;/code&gt;, &lt;code&gt;M-p&lt;/code&gt; 上下選擇候選鍵。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;//company-mode.github.io/images/company-elisp.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;其他插件推薦-a-id-sec-3-name-sec-3-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;其他插件推薦&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/jlr/rainbow-delimiters&#34;&gt;rainbow-delimiters&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gitorious.org/evil/pages/Home&#34;&gt;evil&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.emacswiki.org/emacs/InteractivelyDoThings&#34;&gt;ido&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;截圖-a-id-sec-4-name-sec-4-a:24669216ecb34bc767f2c748b881a6c8&#34;&gt;截圖&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/emacs-clojure-development.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>我的 Linux 桌面</title>
+      <link>http://xuhaojun.github.io/2014/05/16/my-linux-desktop/</link>
+      <pubDate>Fri, 16 May 2014 18:43:49 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/16/my-linux-desktop/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux-distribution-a-id-sec-1-name-sec-1-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Linux Distribution&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.archlinux.org/&#34;&gt;Arch Linux&lt;/a&gt;
+是我現在用的最順手的發行版，剛入門的時候是用
+&lt;a href=&#34;http://www.ubuntu-tw.org/&#34;&gt;Ubuntu&lt;/a&gt;
+，各種卡當不說，升級還要重裝系統，真坑爹阿！而且預設裝了太多我根本用不到的軟件，初學不久後，就判逃去
+Arch 陣營了，因為他是一個很純淨、簡單且更新快的發行版，還記得剛裝完 Arch
+後記憶體居然佔不到 100MB
+且運行快速，這對電腦配置不好的人來說根本超開心！還有 &lt;a href=&#34;https://wiki.archlinux.org/&#34;&gt;Arch
+WiKi&lt;/a&gt; 這個查文檔的好東西。&lt;/p&gt;
+
+&lt;h1 id=&#34;desktop-enviroment-a-id-sec-2-name-sec-2-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Desktop Enviroment&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;經歷了幾番波折後，最後比較穩定使用
+&lt;a href=&#34;https://github.com/c00kiemon5ter/monsterwm&#34;&gt;monsterwm&lt;/a&gt;
+，好吧，嚴格來說它只是個 Window
+Manager 只是桌面環境中的一個子功能罷了，特色就是 dynamic tiling window
+和只用按鍵來操控視窗，不過這幾乎沒啥用到，最多使用就是快速切一邊瀏覽器一邊編輯器如下圖：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-------------
+|           |
+|  Firefox  |
+|-----------|
+|  Emacs    |
+|           |
+-------------
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;還有一個優點就是它啟動後記憶體只佔 1MB。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;實際截圖：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/my-monsterwm.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;是不是很簡潔阿！沒有一絲多餘的東西。&lt;/p&gt;
+
+&lt;h1 id=&#34;browser-a-id-sec-3-name-sec-3-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Browser&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://moztw.org/firefox/&#34;&gt;Firefox&lt;/a&gt;
+是我主要使用的瀏覽器，唯一讓我重度使用的原因：&lt;a href=&#34;http://5digits.org/pentadactyl/&#34;&gt;Pentadactyl&lt;/a&gt;，
+簡單來說就是以鍵盤為主來瀏覽網頁！&lt;/p&gt;
+
+&lt;p&gt;直接上我使用 Pendatactyl 的影片： &lt;a href=&#34;http://youtu.be/BuANeWJR-lM&#34;&gt;Pentadactyl
+Show&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;editor-a-id-sec-4-name-sec-4-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Editor&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;主力編輯器： &lt;a href=&#34;https://www.gnu.org/software/emacs/&#34;&gt;Emacs&lt;/a&gt;
+，現在這篇文章就是在 Emacs 下撰寫的和使用他的
+&lt;a href=&#34;http://orgmode.org/&#34;&gt;Org-mode&lt;/a&gt; ，也是我 Programming 使用的編輯器。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;實際截圖：
+&lt;img src=&#34;/img/my-emacs.png&#34; alt=&#34;img&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;file-manager-a-id-sec-5-name-sec-5-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;File Manager&lt;a id=&#34;sec-5&#34; name=&#34;sec-5&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://docs.xfce.org/xfce/thunar/start&#34;&gt;Thunar&lt;/a&gt;
+，只在要整理一些圖片檔的時候才會用到它，其餘的時間都是 shell 下管理的。&lt;/p&gt;
+
+&lt;h1 id=&#34;media-player-a-id-sec-6-name-sec-6-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Media Player&lt;a id=&#34;sec-6&#34; name=&#34;sec-6&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;使用的是 &lt;a href=&#34;http://smplayer.sourceforge.net/&#34;&gt;SMPlayer&lt;/a&gt;
+，這已經滿足我的需求了！&lt;/p&gt;
+
+&lt;h1 id=&#34;pdf-viewer-a-id-sec-7-name-sec-7-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;PDF Viewer&lt;a id=&#34;sec-7&#34; name=&#34;sec-7&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://pwmt.org/projects/zathura&#34;&gt;zathura&lt;/a&gt;
+是我常用來閱讀電子書的軟體，有像 Vi-like 的快捷鍵，簡單的 &lt;code&gt;j&lt;/code&gt; &lt;code&gt;k&lt;/code&gt; 和
+&lt;code&gt;space&lt;/code&gt; &lt;code&gt;shift-space&lt;/code&gt; &lt;code&gt;/&lt;/code&gt; 對我而言就很夠用了。&lt;/p&gt;
+
+&lt;h1 id=&#34;revision-control-a-id-sec-8-name-sec-8-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Revision Control&lt;a id=&#34;sec-8&#34; name=&#34;sec-8&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://git-cola.github.io/&#34;&gt;git-cola&lt;/a&gt; 是 git
+圖形化界面的軟體，我只在觀察別人的 Repo 的 Log 才會使用。&lt;/p&gt;
+
+&lt;h1 id=&#34;terminal-emulator-a-id-sec-9-name-sec-9-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Terminal Emulator&lt;a id=&#34;sec-9&#34; name=&#34;sec-9&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://pod.tst.eu/http://cvs.schmorp.de/rxvt-unicode/doc/rxvt.1.pod&#34;&gt;rxvt-unicode&lt;/a&gt;
+是我主要使用的虛擬終端，看中它有 C-S
+架構，開多個比較省資源，稍微配一下顏色，就夠用了。&lt;/p&gt;
+
+&lt;h1 id=&#34;office-suite-a-id-sec-10-name-sec-10-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Office Suite&lt;a id=&#34;sec-10&#34; name=&#34;sec-10&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://zh-tw.libreoffice.org/&#34;&gt;LibreOffice&lt;/a&gt; 用來開 .ppt .doc
+的玩意兒，基本上我自己不用它，目前學著用 Latex 或
+Org-mode 來取代文檔撰寫和投影片製作。&lt;/p&gt;
+
+&lt;h1 id=&#34;summary-a-id-sec-11-name-sec-11-a:dd68e279f546165bcfb4e52dfd388714&#34;&gt;Summary&lt;a id=&#34;sec-11&#34; name=&#34;sec-11&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;絕大部分使用 Linux 時間都在 &lt;code&gt;monsterwm&lt;/code&gt; &lt;code&gt;Firefox&lt;/code&gt; &lt;code&gt;Emacs&lt;/code&gt; &lt;code&gt;Urxvt&lt;/code&gt;
+&lt;code&gt;zathura&lt;/code&gt; 下度過，無非就是讀著電子書和放狗和 Stack Overflow
+來查查資料，之後就是 Emacs 編程和在 Terminal
+裡使用 CLI 的工具，總是搞不懂為啥有人老是說 Linux
+的桌面體驗很差？應該還沒到很差的地步吧&amp;#x2026;&amp;#x2026;雖然遊戲很少就是了。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux 遠程文件編輯</title>
+      <link>http://xuhaojun.github.io/2014/05/15/linux-remote-file-edit/</link>
+      <pubDate>Thu, 15 May 2014 18:47:07 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/15/linux-remote-file-edit/</guid>
+      <description>
+
+&lt;p&gt;大部分都是 ssh
+連線過去使用那邊的環境來修改檔案，如果遠程環境沒有稱手的編輯器可是一件很惱人的一件事，所以找了一些方法在本地編輯文件。&lt;/p&gt;
+
+&lt;h1 id=&#34;ssh-filesystem-a-id-sec-1-name-sec-1-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;SSH Filesystem&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://fuse.sourceforge.net/sshfs.html&#34;&gt;sshfs&lt;/a&gt;
+是將遠程的文件系統掛載在本地，之後就可以在本地編輯了，也會同步更新上去。&lt;/p&gt;
+
+&lt;h2 id=&#34;example-a-id-sec-1-1-name-sec-1-1-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;Example:&lt;a id=&#34;sec-1-1&#34; name=&#34;sec-1-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;下面的命令會將遠程的家目錄掛載在你本地的 &lt;code&gt;~/dir&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sshfs user@yourdomain:/home/user ~/dir
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之後就可以隨心所欲的編輯 &lt;code&gt;~/dir&lt;/code&gt; 之下的東西了，當然不侷限於來編輯，像是
+gimp、
+mplayer 什麼的都可以！&lt;/p&gt;
+
+&lt;h1 id=&#34;emacs-tramp-a-id-sec-2-name-sec-2-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;Emacs TRAMP&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.gnu.org/software/tramp/&#34;&gt;TRAMP&lt;/a&gt; 是在 Emacs
+之下來遠程編輯文件的東西。&lt;/p&gt;
+
+&lt;h2 id=&#34;example-a-id-sec-2-1-name-sec-2-1-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;Example:&lt;a id=&#34;sec-2-1&#34; name=&#34;sec-2-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;在 Emacs 之下 &lt;code&gt;M-x find-file&lt;/code&gt; 後輸入 &lt;code&gt;/ssh:user@yourdomain&lt;/code&gt; 然後 Enter
+鍵，就會看到你的家目錄會以 &lt;code&gt;dired-mode&lt;/code&gt;
+的形式開啟，之後選擇你的檔案來編輯！&lt;/p&gt;
+
+&lt;h1 id=&#34;總結-a-id-sec-3-name-sec-3-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;總結&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;如果本地環境允許的話就安裝 &lt;code&gt;sshfs&lt;/code&gt; 吧！這樣方便許多 &lt;code&gt;Emacs TRAMP&lt;/code&gt;
+只能用來編輯文件，而 &lt;code&gt;sshfs&lt;/code&gt; 則不只用來編輯文件，用來看遠程的 pdf
+或影音檔或 copy 檔案都很方便！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>黑白棋 (Clojurescript)</title>
+      <link>http://xuhaojun.github.io/2014/05/11/reversi-game-clojurescript/</link>
+      <pubDate>Sun, 11 May 2014 19:10:27 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/11/reversi-game-clojurescript/</guid>
+      <description>
+
+&lt;p&gt;一個簡單的單機網頁(html5)黑白棋遊戲。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://xuhaojun.github.io/reversi/&#34;&gt;Try it Online&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/XuHaoJun/reversi&#34;&gt;Source code&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;實現算法-a-id-sec-1-name-sec-1-a:62581f113666cc3902cd87e363146d86&#34;&gt;實現算法&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;每次下棋對其八個鄰近方格做掃描，如果是相反顏色的棋子，就往其方位向前找到另一個相同顏色的棋子，若有找到則翻棋，沒有則遍歷下一個方位。&lt;/p&gt;
+
+&lt;h1 id=&#34;電腦-ai-下棋算法-a-id-sec-2-name-sec-2-a:62581f113666cc3902cd87e363146d86&#34;&gt;電腦(AI)下棋算法&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;暫時隨機，在看用哪種好。&lt;/p&gt;
+
+&lt;h1 id=&#34;clojurescript-使用心得-a-id-sec-3-name-sec-3-a:62581f113666cc3902cd87e363146d86&#34;&gt;Clojurescript 使用心得&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;一堆括號阿！！每次都要讓函數回傳有意義的值，Debug
+起來也很容易，一個函數影響的範圍就只有他的參數而已，沒有隱示參數(全域變數、成員變數)的話就很好測試，每個函數就盡量小小的做一件事，不過到使用
+&lt;a href=&#34;https://github.com/photonstorm/phaser&#34;&gt;phaser&lt;/a&gt; (javascript html5 game
+framework)那層就一堆副作用囉!(set! xxx yyy)。&lt;/p&gt;
+
+&lt;h1 id=&#34;截圖-a-id-sec-4-name-sec-4-a:62581f113666cc3902cd87e363146d86&#34;&gt;截圖&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/reversi-game.png&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Clojure 遞迴測試</title>
+      <link>http://xuhaojun.github.io/2014/05/10/clojure-recursion/</link>
+      <pubDate>Sat, 10 May 2014 19:43:37 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/10/clojure-recursion/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;http://clojure.org/functional_programming#Functional%2520Programming--Recursive%2520Looping&#34;&gt;Clojure Recursive
+Looping&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;傳統遞迴-a-id-sec-1-name-sec-1-a:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;傳統遞迴&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&#34;source-a-id-sec-1-1-name-sec-1-1-a:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Source&lt;a id=&#34;sec-1-1&#34; name=&#34;sec-1-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn deepable-recur? [deep-length]
+  (if (= 0 deep-length)
+    true
+    (deepable-recur? (dec deep-length))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;test-a-id-sec-1-2-name-sec-1-2-a:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Test&lt;a id=&#34;sec-1-2&#34; name=&#34;sec-1-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;一個很蠢的測試函式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn deep-test [start end step deep-fn]
+  (doseq [length (range start end step)]
+    (if (deep-fn length) (println length &amp;quot;Deep Done!&amp;quot;))))
+
+(deep-test 5000 10000 1000 deepable-recur?)
+;;; output-&amp;gt;
+;; 5000 Deep Done!
+;; 6000 Deep Done!
+;; 7000 Deep Done!
+;; 8000 Deep Done!
+;; StackOverflowError 
+;; clojure.lang.Numbers$LongOps.combine (Numbers.java:394)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;clojure-recur-special-operator-a-id-sec-2-name-sec-2-a:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Clojure recur special operator&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&#34;source-a-id-sec-2-1-name-sec-2-1-a:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Source&lt;a id=&#34;sec-2-1&#34; name=&#34;sec-2-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn deepable-recur? [deep-length]
+  (loop [len deep-length]
+    (if (= 0 len)
+      true
+      (recur (dec len)))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;test-a-id-sec-2-2-name-sec-2-2-a:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Test&lt;a id=&#34;sec-2-2&#34; name=&#34;sec-2-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;(deep-test 60000000 80000000 2000000 deepable-recur?)
+;;; output-&amp;gt;
+;; 60000000 Deep Done!
+;; 62000000 Deep Done!
+;; 64000000 Deep Done!
+;; 66000000 Deep Done!
+;; 68000000 Deep Done!
+;; 70000000 Deep Done!
+;; 72000000 Deep Done!
+;; 74000000 Deep Done!
+;; 76000000 Deep Done!
+;; 78000000 Deep Done!
+;; nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;clojure-trampoline-a-id-sec-3-name-sec-3-a:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Clojure trampoline&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&#34;source-a-id-sec-3-1-name-sec-3-1-a:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Source&lt;a id=&#34;sec-3-1&#34; name=&#34;sec-3-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn deepable-recur? [deep-length]
+  (if (= 0 deep-length)
+    true
+    #(deepable-recur? (dec deep-length))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;test-a-id-sec-3-2-name-sec-3-2-a:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Test&lt;a id=&#34;sec-3-2&#34; name=&#34;sec-3-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;比上面那個慢多了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(trampoline deepable-recur? 70000000)
+;;; output-&amp;gt;
+;; true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://clojure.org/functional_programming#Functional%2520Programming--Recursive%2520Looping&#34;&gt;Clojure Recursive
+Looping&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;傳統遞迴-a-id-sec-1-name-sec-1-a-1:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;傳統遞迴&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&#34;source-a-id-sec-1-1-name-sec-1-1-a-1:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Source&lt;a id=&#34;sec-1-1&#34; name=&#34;sec-1-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn deepable-recur? [deep-length]
+  (if (= 0 deep-length)
+    true
+    (deepable-recur? (dec deep-length))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;test-a-id-sec-1-2-name-sec-1-2-a-1:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Test&lt;a id=&#34;sec-1-2&#34; name=&#34;sec-1-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;一個很蠢的測試函式：&lt;/p&gt;
+
+&lt;p&gt;(defn deep-test &lt;a href=&#34;doseq [length (range start end step&#34;&gt;start end step deep-fn&lt;/a&gt;]
+    (if (deep-fn length)
+      (println length &amp;ldquo;Deep Done!&amp;rdquo;))))
+(deep-test 5000 10000 1000 deepable-recur?)
+;;; output-&amp;gt;
+;; 5000 Deep Done!
+;; 6000 Deep Done!
+;; 7000 Deep Done!
+;; 8000 Deep Done!
+;; StackOverflowError   clojure.lang.Numbers$LongOps.combine
+(Numbers.java:394)&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;clojure-recur-special-operator-a-id-sec-2-name-sec-2-a-1:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Clojure recur special operator&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&#34;source-a-id-sec-2-1-name-sec-2-1-a-1:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Source&lt;a id=&#34;sec-2-1&#34; name=&#34;sec-2-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn deepable-recur? [deep-length]
+  (loop [len deep-length]
+    (if (= 0 len)
+      true
+      (recur (dec len)))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;test-a-id-sec-2-2-name-sec-2-2-a-1:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Test&lt;a id=&#34;sec-2-2&#34; name=&#34;sec-2-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;(deep-test 60000000 80000000 2000000 deepable-recur?)
+;;; output-&amp;gt;
+;; 60000000 Deep Done!
+;; 62000000 Deep Done!
+;; 64000000 Deep Done!
+;; 66000000 Deep Done!
+;; 68000000 Deep Done!
+;; 70000000 Deep Done!
+;; 72000000 Deep Done!
+;; 74000000 Deep Done!
+;; 76000000 Deep Done!
+;; 78000000 Deep Done!
+;; nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;clojure-trampoline-a-id-sec-3-name-sec-3-a-1:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Clojure trampoline&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&#34;source-a-id-sec-3-1-name-sec-3-1-a-1:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Source&lt;a id=&#34;sec-3-1&#34; name=&#34;sec-3-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn deepable-recur? [deep-length]
+  (if (= 0 deep-length)
+    true
+    #(deepable-recur? (dec deep-length))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;test-a-id-sec-3-2-name-sec-3-2-a-1:35d8892b97503d2142a01e8e3b6e846d&#34;&gt;Test&lt;a id=&#34;sec-3-2&#34; name=&#34;sec-3-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;比上面那個慢多了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(trampoline deepable-recur? 70000000)
+;;; output-&amp;gt;
+;; true
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Openvpn &#43; Vpn Gate &#43; Ruby</title>
+      <link>http://xuhaojun.github.io/2013/10/20/openvpn-and-vpngate/</link>
+      <pubDate>Sun, 20 Oct 2013 19:47:19 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/10/20/openvpn-and-vpngate/</guid>
+      <description>
+
+&lt;p&gt;寫了個連去 vpngate 用的小腳本，不然每次得去官網手動下載設定檔太麻煩了。&lt;/p&gt;
+
+&lt;p&gt;預設是連質量最高的 Server，也只能連這個，以後看需求重寫吧。&lt;/p&gt;
+
+&lt;h1 id=&#34;source-a-id-sec-1-name-sec-1-a:eb18c4e37c3842e712df167450d44783&#34;&gt;Source&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/env ruby
+### 1. Download(curl) vpngate csv from offical site
+### 2. Convert csv to ruby array
+### 3. Decode openvpn config by base64
+### 4. Run command openvpn and use the highest score server config file
+
+require &#39;csv&#39;
+require &#39;base64&#39;
+require &#39;tempfile&#39;
+
+### 1.
+vpngate_csv_url = &amp;quot;http://www.vpngate.net/api/iphone/&amp;quot;
+puts &amp;quot;==&amp;gt; Downloading vpngate csv from #{vpngate_csv_url}&amp;quot;
+vpngate_ori_csv = `curl #{vpngate_csv_url}`
+if not vpngate_ori_csv.empty?
+  puts &amp;quot;==&amp;gt; Successfully download&amp;quot;
+else
+  puts &amp;quot;==&amp;gt; Fail to download vpngate csv&amp;quot;
+  exit 0
+end
+
+
+### 2.
+vg_rb_csv = CSV.parse(vpngate_ori_csv)
+# vg_rb_csv[1]
+# =&amp;gt; [&amp;quot;#HostName&amp;quot;, &amp;quot;IP&amp;quot;, &amp;quot;Score&amp;quot;, &amp;quot;Ping&amp;quot;, &amp;quot;Speed&amp;quot;, &amp;quot;CountryLong&amp;quot;, &amp;quot;CountryShort&amp;quot;,
+#     &amp;quot;NumVpnSessions&amp;quot;, &amp;quot;Uptime&amp;quot;, &amp;quot;TotalUsers&amp;quot;, &amp;quot;TotalTraffic&amp;quot;, &amp;quot;LogType&amp;quot;, &amp;quot;Operator&amp;quot;,
+#     &amp;quot;Message&amp;quot;, &amp;quot;OpenVPN_ConfigData_Base64&amp;quot;]
+
+
+### 3.
+openvpn_config = Base64.decode64 vg_rb_csv[2][-1] # vg_rb_csv[2] is
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;the first server csv data&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;### 4.
+openvpn_config_file = Tempfile.new(vg_rb_csv[2][0])
+openvpn_config_file.write(openvpn_config)
+begin
+  puts &amp;quot;========================================================================&amp;quot;
+  puts &amp;quot;==&amp;gt; Use the highest score server&amp;quot;
+  puts &amp;quot;==&amp;gt; Server info:&amp;quot;
+  puts &amp;quot;    IP:#{vg_rb_csv[2][1]} Country:#{vg_rb_csv[2][5]}
+        Ping:#{vg_rb_csv[2][3]}ms Speed:#{vg_rb_csv[2][4][0..3].to_i/100.0}Mbps
+        Score:#{vg_rb_csv[2][2]}&amp;quot;
+
+  openvpn_cmd = &amp;quot;sudo openvpn --config #{openvpn_config_file.path}&amp;quot;
+  puts &amp;quot;==&amp;gt; Run openvpn and use vpngate openvpn config file at
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;#{openvpn_config_file.path}&amp;rdquo;
+      puts openvpn_cmd
+      system(openvpn_cmd, out: $stdout, err: :out)
+    ensure
+      openvpn_config_file.close
+      openvpn_config_file.unlink
+    end&lt;/p&gt;
+
+&lt;h1 id=&#34;example-a-id-sec-2-name-sec-2-a:eb18c4e37c3842e712df167450d44783&#34;&gt;Example&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;==&amp;gt; Downloading vpngate csv from http://www.vpngate.net/api/iphone/
+  % Total    % Received % Xferd  Average Speed   Time    Time
+  Time  Current
+  Left  Speed
+  100 1105k  100 1105k    0     0   583k      0  0:00:01  0:00:01 --:--:--  584k
+==&amp;gt; Successfully download
+========================================================================
+==&amp;gt; Use the highest score server
+==&amp;gt; Server info:
+    IP:118.108.100.149 Country:Japan Ping:47ms Speed:51.95Mbps
+Score:536155
+==&amp;gt; Run openvpn and use vpngate openvpn config file at
+/tmp/vg198681512520131020-16665-13qjlwe
+ sudo openvpn --config /tmp/vg198681512520131020-16665-13qjlwe
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ruby block match and jump (emacs evil-mode)</title>
+      <link>http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/</link>
+      <pubDate>Sat, 19 Oct 2013 19:55:09 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/10/19/evil-ruby-jump-item/</guid>
+      <description>
+
+&lt;h1 id=&#34;description-a-id-sec-1-name-sec-1-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Description&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;Emacs evil-mode &lt;code&gt;%&lt;/code&gt; 功能加上 Ruby block 的配對，例如將光標放在 &lt;code&gt;class
+Foo&lt;/code&gt; 上後鍵入 &lt;code&gt;%&lt;/code&gt; 可以跳轉至相符的 &lt;code&gt;end&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h1 id=&#34;example-a-id-sec-2-name-sec-2-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Example&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/img/evil-ruby-jump-item.gif&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;source-code-a-id-sec-3-name-sec-3-a:20e3104edfee02abb38223cd2bcf788a&#34;&gt;Source Code&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;;; Require package: (evil)
+(evil-define-motion evil-ruby-jump-item (count)
+  :jump t
+  :type inclusive
+  (cond ((string-match ruby-block-beg-re (current-word))
+         (ruby-end-of-block count))
+        ((string-match ruby-block-end-re (current-word))
+         (ruby-beginning-of-block count))
+        (t
+         (evil-jump-item count))))
+
+(add-hook &#39;ruby-mode-hook
+          (lambda ()
+            (define-key evil-normal-state-local-map &amp;quot;%&amp;quot; &#39;evil-ruby-jump-item)
+            (define-key evil-motion-state-local-map &amp;quot;%&amp;quot; &#39;evil-ruby-jump-item)))
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>帕斯卡三角形 (Ruby)</title>
+      <link>http://xuhaojun.github.io/2013/09/03/pascal-triangle-ruby/</link>
+      <pubDate>Tue, 03 Sep 2013 19:37:52 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/09/03/pascal-triangle-ruby/</guid>
+      <description>
+
+&lt;h1 id=&#34;帕斯卡三角形-a-id-sec-1-name-sec-1-a:0638fe5e5d536e297a6ec80324afce45&#34;&gt;帕斯卡三角形&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/PascalTriangleAnimated2.gif/210px-PascalTriangleAnimated2.gif&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def pascal_triangle(n, i = 2, result = [[1], [1,1]])
+  if n == 1
+    [[1]]
+  elsif n == 2
+    [[1], [1,1]]
+  elsif i == n
+    result
+  else
+    current_row = [1]
+    (i-1).times do |n|
+      current_row &amp;lt;&amp;lt; (result[i-1][n] + result[i-1][n+1])
+    end
+    current_row &amp;lt;&amp;lt; 1
+
+    pascal_triangle(n, i+1, result &amp;lt;&amp;lt; current_row)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Image reference: &lt;a href=&#34;https://zh.wikipedia.org/zh-tw/%25E6%259D%25A8%25E8%25BE%2589%25E4%25B8%2589%25E8%25A7%2592%25E5%25BD%25A2&#34;&gt;Pascal-triangle
+Wikipedia-chi&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;output-a-id-sec-2-name-sec-2-a:0638fe5e5d536e297a6ec80324afce45&#34;&gt;Output&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;pst = pascal_triangle(7)
+
+puts pst.pretty_inspect
+
+=begin
+[[1],
+ [1, 1],
+ [1, 2, 1],
+ [1, 3, 3, 1],
+ [1, 4, 6, 4, 1],
+ [1, 5, 10, 10, 5, 1],
+ [1, 6, 15, 20, 15, 6, 1]]
+=&amp;gt; nil
+=end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;check-a-id-sec-3-name-sec-3-a:0638fe5e5d536e297a6ec80324afce45&#34;&gt;Check&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;pst.map {|row| row.reduce(:+) == 2 ** (row.length - 1) }
+# =&amp;gt; [true, true, true, true, true, true, true]
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Emacs 自動縮進 Ruby&#39;s if-else</title>
+      <link>http://xuhaojun.github.io/2013/08/29/emacs-ruby-indent/</link>
+      <pubDate>Thu, 29 Aug 2013 20:03:03 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/29/emacs-ruby-indent/</guid>
+      <description>
+
+&lt;h1 id=&#34;problem-a-id-sec-1-name-sec-1-a:cd231999e942cfc93b0759bc58b7811b&#34;&gt;Problem&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;當我打完 elsif 時，他應該要縮進到 if 那邊。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if
+   elsif # Should indent this line
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;正確的 if-else 縮進：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if 1&amp;gt;2
+  #....
+elsif
+  #...
+else
+  #...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很明顯 else 和 elsif 是向 if 對齊縮進的。&lt;/p&gt;
+
+&lt;h1 id=&#34;solution-a-id-sec-2-name-sec-2-a:cd231999e942cfc93b0759bc58b7811b&#34;&gt;Solution&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;發現在 Emacs 上沒有自動縮進 Ruby 的 if-else 語法後，去試了一下 vim
+發現可以處理 if-else
+的縮進，當然得跟上！&lt;/p&gt;
+
+&lt;p&gt;最簡單的方法就是在按 &lt;code&gt;space&lt;/code&gt; 時，檢查前一個 word 是不是 &lt;code&gt;else&lt;/code&gt; 或
+&lt;code&gt;elsif&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;首先我有用 ruby-electric，這東西會在你打 &lt;code&gt;if&lt;/code&gt; 或 &lt;code&gt;class&lt;/code&gt; 等等
+自動產生一個 &lt;code&gt;end&lt;/code&gt;
+在下行，他是依據你打 &lt;code&gt;if&amp;lt;space&amp;gt;&lt;/code&gt; 的 &lt;code&gt;&amp;lt;space&amp;gt;&lt;/code&gt; 時會觸發產生一個 &lt;code&gt;end&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;&amp;lt;space&amp;gt;&lt;/code&gt; 對應到 ruby-electric-space 這個 funciton，我從 ruby-electric
+裡複製過來，很像不應該這樣做，不過不管了。&lt;/p&gt;
+
+&lt;p&gt;以下是修改過後的版本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defun ruby-electric-space (arg)
+  (interactive &amp;quot;P&amp;quot;)
+  (self-insert-command (prefix-numeric-value arg))
+  (cond ((ruby-electric-space-can-be-expanded-p)
+         (save-excursion
+           (ruby-indent-line t)
+           (newline)
+           (ruby-electric-insert-end)))
+        ((ruby-electric-space-can-be-indent-p) (ruby-indent-line t))))
+
+(defun ruby-electric-space-can-be-indent-p ()
+  (and (ruby-electric-code-at-point-p)
+       (ruby-electric-matching-word-p)))
+
+(defun ruby-electric-matching-word-p ()
+  (save-excursion
+    (backward-word)
+    (string-match &amp;quot;\\(\\&amp;lt;else\\&amp;gt;\\|\\&amp;lt;elsif\\&amp;gt;\\)&amp;quot; (current-word))))
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>阿姆斯壯數 (Ruby)</title>
+      <link>http://xuhaojun.github.io/2013/08/27/armstrong-num-ruby/</link>
+      <pubDate>Tue, 27 Aug 2013 19:32:07 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/27/armstrong-num-ruby/</guid>
+      <description>
+
+&lt;p&gt;寫一些簡單的演算法來熟悉 Ruby。&lt;/p&gt;
+
+&lt;h1 id=&#34;armstrong-number-a-id-sec-1-name-sec-1-a:6486ff3a0a39604736e43d2cf3c6c774&#34;&gt;Armstrong number&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%25E6%25B0%25B4%25E4%25BB%2599%25E8%258A%25B1%25E6%2595%25B0&#34;&gt;阿姆斯壯數 -
+WiKi&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;指一 N 位数，其各个数之 N 次方和等于该数。&lt;/p&gt;
+
+&lt;p&gt;例如 153、370、371 及 407
+就是三位數的水仙花数，其各个数之立方和等于该数：&lt;/p&gt;
+
+&lt;h1 id=&#34;source-code:6486ff3a0a39604736e43d2cf3c6c774&#34;&gt;Source code&lt;/h1&gt;
+
+&lt;p&gt;不曉得型別轉來轉去算不算壞習慣&amp;#x2026;。&lt;/p&gt;
+
+&lt;p&gt;有用到 lazy 這個 enumerator，如果沒用 lazy 的話就會當在那裡了，lazy
+感覺很像是一個一個求值後在判斷在存值，沒有使用的話則一次全部求值後在做事。&lt;/p&gt;
+
+&lt;p&gt;懶的想怎麼做優化了，怕到時候改一改可讀性就沒現在這個好了，先留這個作筆記。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class Integer
+  def armstrong_num? # may be have more better name..
+    sum = 0
+    digits = self.to_s.length
+    digits.times { |n| sum += (self.to_s[n].to_i ** digits) }
+    return sum == self
+  end
+end
+
+# 三位數的所有阿姆斯壯數
+(100...1000).select{ |x| x.armstrong_num? }
+# =&amp;gt; [153, 370, 371, 407]
+
+# 四位數的第一個阿姆斯壯數
+(1000...10000).select{ |x| x.armstrong_num? }.first(1)
+# =&amp;gt; [1634]
+
+# 前 15 個阿姆斯壯數
+(1..Float::INFINITY).lazy.select{ |x| x.armstrong_num? }.first(15)
+# =&amp;gt; [1, 2, 3, 4, 5, 6, 7, 8, 9, 153, 370, 371, 407, 1634, 8208]
+
+# 前三個阿姆斯壯數，從三位數開始
+(100..Float::INFINITY).lazy.select{ |x| x.armstrong_num? }.first(3)
+# =&amp;gt; [153, 370, 371]
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>產生一組不重複整數的集合(Ruby)</title>
+      <link>http://xuhaojun.github.io/2013/08/25/gen-uniq-nums-ruby/</link>
+      <pubDate>Sun, 25 Aug 2013 04:10:14 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/25/gen-uniq-nums-ruby/</guid>
+      <description>
+
+&lt;p&gt;先用 Ruby 寫以前上 Android 中猜數字範例中用到的算法：&lt;/p&gt;
+
+&lt;h1 id=&#34;normal-way-1-a-id-sec-1-name-sec-1-a:813bc76884f654364af38e575809aea8&#34;&gt;Normal Way - 1&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;def get_uniq_nums(size, range)
+  ary = []
+  begin
+    r = rand(range)
+    if ary.member?(r)
+      next
+    else
+      ary &amp;lt;&amp;lt; r
+    end
+  end while( ary.length &amp;lt; size )
+  return ary
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;記得之前教的不是用 member
+的方法來判斷，當初沒有提到用到集合的概念寫，好像是檢查前面幾個數字的迴圈吧，那陀
+Java 程式碼已經忘光了。&lt;/p&gt;
+
+&lt;p&gt;這是產生 4 個不重複 1~9 的數字，放在一個陣列裡面&lt;br /&gt;
+&lt;code&gt;get_uniq_nums(4, (1...10))&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;變成一個數字，先 join 把他連在一起變成字串，在轉回數字。&lt;br /&gt;
+&lt;code&gt;get_uniq_nums(4, (1...10)).join.to_i&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;normal-way-2-a-id-sec-2-name-sec-2-a:813bc76884f654364af38e575809aea8&#34;&gt;Normal Way - 2&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;def get_uniq_nums(size, range, ary = [])
+  if size.zero?
+    ary
+  elsif ary.member?(r = rand(range))
+    get_uniq_nums(size , range, ary)
+  else
+    get_uniq_nums(size - 1, range, (ary &amp;lt;&amp;lt; r))
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;試了別種寫法，很像叫尾遞迴的方法，跟普通遞迴好像差別在多用一個參數在存值，在
+Emacs lisp
+很像還要多用一個函數才能不影響原來的接口。順便一提，弄不出一個函數的普通遞迴方法。&lt;/p&gt;
+
+&lt;p&gt;以下是普通遞迴版失敗品：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def get_uniq_nums(size, range)
+  if size.zero?
+    []
+  elsif get_uniq_nums(size, range).member?(r = rand(range))
+    get_uniq_nums(size, range)
+  else
+    get_uniq_nums(size - 1, range) &amp;lt;&amp;lt; r
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;set-way-a-id-sec-3-name-sec-3-a:813bc76884f654364af38e575809aea8&#34;&gt;Set Way&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;放狗一搜，找到了其他方法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/119107/how-do-i-generate-a-list-of-n-unique-random-numbers-in-ruby&#34;&gt;How do I generate a list of n unique random numbers in
+Ruby?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Set implements a collection of unordered values with no duplicates.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;set&#39;
+
+def rand_n(n, max)
+  randoms = Set.new
+  loop do
+    randoms &amp;lt;&amp;lt; rand(max)
+    return randoms.to_a if randoms.size &amp;gt;= n
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好吧&amp;#x2026;原來 Ruby 內建了 Set
+的資料型態，第一次發現有內建集合的程式語言，當初應該要想到 Java
+中有沒有這東西。
+上面是用集合內不重複元素的特性，所以在加入元素時天生就會檢查有沒有重複，最後在轉成陣列。&lt;/p&gt;
+
+&lt;p&gt;看來以後可以玩玩看交集、聯集、差集之類的，還有子集合判斷之類的。&lt;/p&gt;
+
+&lt;h1 id=&#34;range-way-1-a-id-sec-4-name-sec-4-a:813bc76884f654364af38e575809aea8&#34;&gt;Range Way - 1&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;A Range represents an interval&amp;#x2014;a set of values with a beginning
+and
+an end.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;range = 0...1000000
+how_many = 10000
+
+# first way
+# Array::sample Choose a random element or n random elements from
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;the array.
+    range.to_a.sample(how_many)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# second way
+(range).sort_by{rand}[0...how_many]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;直接從 Range 裡用內建的方法隨機挑，行數完敗上面那兩個。&lt;/p&gt;
+
+&lt;h1 id=&#34;range-way-2-a-id-sec-5-name-sec-5-a:813bc76884f654364af38e575809aea8&#34;&gt;Range Way - 2&lt;a id=&#34;sec-5&#34; name=&#34;sec-5&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;突然想到如果要在生成時就篩選掉不想要數字的話，要怎麼做？&lt;/p&gt;
+
+&lt;p&gt;仔細一想很簡單，直接在在範圍裡改。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Delete 2 from the range of rand
+(1..4).reject { |x| x==2 }.to_a.sample(how_many)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;benchmark-them-a-id-sec-6-name-sec-6-a:813bc76884f654364af38e575809aea8&#34;&gt;Benchmark them&lt;a id=&#34;sec-6&#34; name=&#34;sec-6&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&#34;part-1-a-id-sec-6-1-name-sec-6-1-a:813bc76884f654364af38e575809aea8&#34;&gt;Part 1&lt;a id=&#34;sec-6-1&#34; name=&#34;sec-6-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;benchmark&#39;
+
+range = 0...1000000
+how_many = 10000
+
+## Range way - 1
+Benchmark.realtime do
+  range.to_a.sample(how_many)
+end
+# =&amp;gt; 0.076334817
+
+## Set Way
+Benchmark.realtime do
+  rand_n(how_many, range)
+end
+# =&amp;gt; 0.01060032
+
+## Normal way - 1
+Benchmark.realtime do
+  get_uniq_nums(how_many, range)
+end
+# =&amp;gt; 3.565261117
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;part-2-a-id-sec-6-2-name-sec-6-2-a:813bc76884f654364af38e575809aea8&#34;&gt;Part 2&lt;a id=&#34;sec-6-2&#34; name=&#34;sec-6-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;range = 0...1000000
+how_many = 1000000
+
+## Set Way
+Benchmark.realtime do
+  rand_n(how_many, range)
+end
+# =&amp;gt; 11.305328646
+
+## Range way - 1
+Benchmark.realtime do
+  range.to_a.sample(how_many)
+end
+# =&amp;gt; 0.112987391
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Range Way 完敗。 還有沒有實現 Set Way 和 Normal Way 的篩選的功能。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Org-mode &#43; Octopress &#43; Github 來搭建 Blog</title>
+      <link>http://xuhaojun.github.io/2013/08/23/emacs-org-octopress/</link>
+      <pubDate>Fri, 23 Aug 2013 19:57:41 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/23/emacs-org-octopress/</guid>
+      <description>
+
+&lt;ul&gt;
+&lt;li&gt;優點
+
+&lt;ul&gt;
+&lt;li&gt;免費網域、免費託管、免費流量&lt;/li&gt;
+&lt;li&gt;版本管理，不用擔心備份！&lt;/li&gt;
+&lt;li&gt;Org-mode or Markdown 撰寫效率好&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;缺點
+
+&lt;ul&gt;
+&lt;li&gt;技術門檻要求較高&lt;br /&gt;
+    需要懂一些 Git, Github, Org-mode 或 Makrdown，更進階要客製化
+Blog 的話，可能還要
+懂些許 Ruby (jekyll)&lt;/li&gt;
+&lt;li&gt;Org-mode 的 code block 沒有 markdown&amp;rsquo;s code block 的 title url
+功能。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;org-mode-a-id-sec-1-name-sec-1-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Org-mode&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Org mode is for keeping notes, maintaining TODO lists, planning
+projects, and
+authoring documents with a fast and effective plain-text system.&lt;br /&gt;
+&lt;strong&gt;&lt;a href=&#34;http://orgmode.org/&#34;&gt;http://orgmode.org/&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Org-mode 是建立於 Emacs(編輯器)
+之上的插件，是一種輕量級的標記語言可以用來做時間管理、筆記、生成 Html
+&amp;#x2026; ，同類型的流行的還有 Markdown，這篇文章基本上就是
+Emacs + org-mode 寫的，之後在透過插件
+&lt;a href=&#34;https://github.com/yoshinari-nomura/org-octopress&#34;&gt;org-octopress&lt;/a&gt;
+生成給 Octopress 用。&lt;/p&gt;
+
+&lt;h2 id=&#34;install-emacs-24-x-a-id-sec-1-1-name-sec-1-1-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Install Emacs(24.x)&lt;a id=&#34;sec-1-1&#34; name=&#34;sec-1-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;我只會在 Linux 平台上用 Package 裝。&lt;/p&gt;
+
+&lt;p&gt;一些流行的 Linux distribution 的 Package Manager 安裝方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pacman -S emacs          # Archlinux
+apt-get install emacs    # Ubuntu
+yum install emacs        # Fedora
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;install-org-and-org-octopress-a-id-sec-1-2-name-sec-1-2-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Install org and org-octopress&lt;a id=&#34;sec-1-2&#34; name=&#34;sec-1-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;用 Emacs 裡的 Package Manager 安裝：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# 在家目錄建一個 .emacs.d 資料夾後，在裡面建 init.el
+mkdir ~/.emacs.d
+touch ~/.emacs.d/init.el
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在 init.el 添加：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(add-to-list &#39;package-archives
+  &#39;(&amp;quot;marmalade&amp;quot; . &amp;quot;http://marmalade-repo.org/packages/&amp;quot;))
+
+(add-to-list &#39;package-archives
+  &#39;(&amp;quot;melpa&amp;quot; . &amp;quot;http://melpa.milkbox.net/packages/&amp;quot;) t)
+
+(package-initialize)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;開啟 Emacs 鍵入 &lt;code&gt;M-x package-install org RET&lt;/code&gt; ，把 org 換成
+org-octopress 後安裝。&lt;/p&gt;
+
+&lt;h2 id=&#34;org-octopress-setup-a-id-sec-1-3-name-sec-1-3-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Org-octopress Setup&lt;a id=&#34;sec-1-3&#34; name=&#34;sec-1-3&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;以下是從
+&lt;a href=&#34;https://github.com/yoshinari-nomura/org-octopress&#34;&gt;org-octopress&lt;/a&gt; 的
+README 裡擷取 Basic Settings 的片段。&lt;/p&gt;
+
+&lt;p&gt;添加在 init.el。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Emacs Settings:&lt;/p&gt;
+
+&lt;p&gt;(require &amp;lsquo;org-octopress)
+(setq org-octopress-directory-top       &amp;ldquo;~/octopress/source&amp;rdquo;)
+(setq org-octopress-directory-posts     &amp;ldquo;~/octopress/source/_posts&amp;rdquo;)
+(setq org-octopress-directory-org-top   &amp;ldquo;~/octopress/source&amp;rdquo;)
+(setq org-octopress-directory-org-posts &amp;ldquo;~/octopress/source/blog&amp;rdquo;)
+(setq org-octopress-setup-file          &amp;ldquo;~/org-sty/setupfile.org&amp;rdquo;)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Octopress Settings:&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In octopress/&lt;sub&gt;config&lt;/sub&gt;.yml, you must set the permelink
+attribute:&lt;br /&gt;
+&lt;code&gt;permalink: /blog/:year-:month-:day-:title.html&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;octopress-a-id-sec-2-name-sec-2-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Octopress&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt; 是一套 Blog 的框架，所以一開始你的
+Blog 就有一個簡潔的外觀，功能上有支援 Twitter, Facebook, Delicious
+等等，也可以用來產生靜態 Blog 後放在 Github
+上，預設是用 Markdown 來撰寫文章。&lt;/p&gt;
+
+&lt;h2 id=&#34;install-and-use-octopress-a-id-sec-2-1-name-sec-2-1-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Install and Use Octopress&lt;a id=&#34;sec-2-1&#34; name=&#34;sec-2-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;要先安裝 &lt;a href=&#34;http://www.ruby-lang.org/en/&#34;&gt;Ruby&lt;/a&gt; 和
+&lt;a href=&#34;http://gitscm.com/&#34;&gt;Git&lt;/a&gt;。&lt;br /&gt;
+官方的方法： &lt;a href=&#34;http://octopress.org/docs/setup/&#34;&gt;Octopress Setup&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;github-a-id-sec-3-name-sec-3-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;Github&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;首先有個 &lt;a href=&#34;https://github.com/&#34;&gt;Github&lt;/a&gt; 的帳號後，建立一個 Repository 為
+username.github.io，之後去你的 octopress 的根目錄鍵入 &lt;code&gt;bundle exec rake
+setup_github_page&lt;/code&gt; 輸入剛剛建完給你的 url。&lt;/p&gt;
+
+&lt;p&gt;官方文檔: &lt;a href=&#34;https://help.github.com/&#34;&gt;GithubHelp&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;基本流程-a-id-sec-4-name-sec-4-a:cbf7100be1a3666db65d058f688f37bb&#34;&gt;基本流程&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;開啟 Emacs 鍵入 &lt;code&gt;M-x org-octopress RET&lt;/code&gt; ，會到 org-octopress
+的界面鍵入 &lt;code&gt;w&lt;/code&gt;
+   和標題，開始撰寫文章。&lt;/li&gt;
+&lt;li&gt;寫完後，鍵入 &lt;code&gt;C-c C-e P x octopress&lt;/code&gt; 來生成靜態網頁&lt;/li&gt;
+&lt;li&gt;在你的 octopress 根目錄鍵入 &lt;code&gt;bundle exec rake gen_deploy&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;也可以把 source branch 下 push 上去做版本管理 &lt;code&gt;git push -u origin
+source&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;文章打到一半或要做確認的時候用(需先生成靜態網頁) &lt;code&gt;bundle exec rake
+preview&lt;/code&gt; ，之後在
+&lt;a href=&#34;http://localhost:4000/&#34;&gt;http://localhost:4000/&lt;/a&gt; 可以看你的 Blog。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>解決 Org-mode(8.x) 轉 Html 中文換行變空格問題</title>
+      <link>http://xuhaojun.github.io/2013/08/19/han-extra-space-org-mode/</link>
+      <pubDate>Mon, 19 Aug 2013 19:26:15 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/19/han-extra-space-org-mode/</guid>
+      <description>&lt;p&gt;基本上是照這兩篇提供的解法去依樣畫葫蘆出來的 org-mode 版本。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/8550112/prevent-browser-converting-n-between-lines-into-space-for-chinese-characters/8551033#8551033&#34;&gt;Prevent browser converting &amp;lsquo;\n&amp;rsquo; between lines into space (for
+Chinese
+characters)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://chenyufei.info/blog/2011-12-23/fix-chinese-newline-becomes-space-in-browser-problem/&#34;&gt;解决 Markdown 转 HTML
+中文换行变空格的问题&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;大致上的解法是將 html 檔案裡，將中文字後有接個換行符的把他合併為一行。&lt;br /&gt;
+感覺上是個 workaround 的方法，如果在餵給 rss
+似乎又會有問題，不過我無法忍受那些多餘的空格。&lt;/p&gt;
+
+&lt;p&gt;代碼如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defun han/org-html-delete-extra-space (string backend info)
+  &amp;quot;Let chinese word to a line if match /han\newline/&amp;quot;
+  (when (and (org-export-derived-backend-p backend &#39;html)
+             (string-match &amp;quot;\\cc\n&amp;quot; string))
+    (replace-regexp-in-string &amp;quot;\\(\\cc\\)\n\\(\\cc\\)&amp;quot; &amp;quot;\\1\\2&amp;quot; string)))
+
+(eval-after-load &#39;ox-html
+  &#39;(add-to-list &#39;org-export-filter-final-output-functions
+                &#39;han/org-html-delete-extra-space))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;順便吐槽一下 emacs 裡的 regex，實在太多 &lt;code&gt;\&lt;/code&gt; 了&lt;br /&gt;
+這是上面連結文中 Ruby 的 Regex 樣式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# \p{Han} 是漢字
+gsub(/(\p{Han})\n(\p{Han})/m, &#39;\1\2&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;這是 Emacs-lisp 的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;;; \\cc 是漢字
+(replace-regexp-in-string &amp;quot;\\(\\cc\\)\n\\(\\cc\\)&amp;quot; &amp;quot;\\1\\2&amp;quot; string)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>使用 Pentadactyl (Firefox add-on)</title>
+      <link>http://xuhaojun.github.io/2013/08/17/my-pentadactyl-tip/</link>
+      <pubDate>Sat, 17 Aug 2013 19:59:59 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/17/my-pentadactyl-tip/</guid>
+      <description>
+
+&lt;blockquote&gt;
+&lt;p&gt;Pentadactyl is a free browser add-on for Firefox, designed to make
+browsing more
+efficient and especially more keyboard accessible.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://5digits.org/pentadactyl/index&#34;&gt;Pentadactyl&lt;/a&gt;
+是一個能讓你快速瀏覽網頁的一個火狐插件，其特點是用 Vim-like
+的方式來使用，也可以是說是以鍵盤來做瀏覽動作的一套按法。&lt;/p&gt;
+
+&lt;h1 id=&#34;一些使用心得-a-id-sec-1-name-sec-1-a:40065ec52ada4f825916b15dd2489b2f&#34;&gt;一些使用心得&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;先聲明有些是定制後的 Pentadactyl
+才有的，所以預設的行為會和以下有些出入，還有我的鍵盤的敏感度也調高了。&lt;/p&gt;
+
+&lt;h2 id=&#34;快速移動-a-id-sec-1-1-name-sec-1-1-a:40065ec52ada4f825916b15dd2489b2f&#34;&gt;快速移動&lt;a id=&#34;sec-1-1&#34; name=&#34;sec-1-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;按鍵 &lt;code&gt;j k&lt;/code&gt; 分別為上下移動網頁約5%， &lt;code&gt;h l&lt;/code&gt; 為切換瀏覽至左和右邊的 Tab
+&lt;code&gt;space&lt;/code&gt; 為向下一個 page ，加前綴 shift
+為上。僅僅這些基礎移動就大大超越還在用和滑鼠點擊分頁的我了！但失去滑鼠滾輪還是有差別的，所以我的使用習慣變為
+&lt;code&gt;space&lt;/code&gt; 在網頁上下移動後，之後使用 &lt;code&gt;j k&lt;/code&gt; 微調一下。 &lt;code&gt;gg&lt;/code&gt; 和 &lt;code&gt;G&lt;/code&gt;
+為頁首和尾。還有 Mark 頁面的功能呢！&lt;/p&gt;
+
+&lt;h2 id=&#34;如何點超連結-a-id-sec-1-2-name-sec-1-2-a:40065ec52ada4f825916b15dd2489b2f&#34;&gt;如何點超連結？&lt;a id=&#34;sec-1-2&#34; name=&#34;sec-1-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;這有點說不清，實際用的情況是 &lt;code&gt;f&lt;/code&gt;
+後連結上頭會跑出英文字母，之後在照順序輸入你眼睛盯著的連結上的英文字母，
+&lt;code&gt;F&lt;/code&gt; 則是會開新分頁，是一個很實用的功能，我把連結上頭出現的東西改成以
+&lt;code&gt;asdfjkl;&lt;/code&gt; 排，這樣八個鍵，連移動手指頭都不需要！&lt;/p&gt;
+
+&lt;h2 id=&#34;開啟網頁-a-id-sec-1-3-name-sec-1-3-a:40065ec52ada4f825916b15dd2489b2f&#34;&gt;開啟網頁&lt;a id=&#34;sec-1-3&#34; name=&#34;sec-1-3&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;o&lt;/code&gt; 在當前頁面開啟網頁， &lt;code&gt;t&lt;/code&gt; 為開在新分頁，開啟後鍵入關鍵字，預設會使用
+Google 搜尋，有個很棒的功能叫 Auto-Completion
+，使用時會根據關鍵字給予補全，這類似你在
+Google
+的搜尋欄鍵入關鍵字時會從下方跑出一個列表供你選擇，常用補全的東西有歷史紀錄和剛剛提到搜尋引擎的補全，更多其他補全我也還不清楚但已經很夠用了。&lt;/p&gt;
+
+&lt;p&gt;例如輸入個巴會出現我最近看到的和巴哈姆特有關聯的網址和 title
+但卻還跑出和巴士海峽相關的東西，當然能允許你更精確列出來，接個空白鍵和
+gamer 或哈，就會產生更加有關聯的資訊了。&lt;/p&gt;
+
+&lt;h2 id=&#34;其他實用的功能-a-id-sec-1-4-name-sec-1-4-a:40065ec52ada4f825916b15dd2489b2f&#34;&gt;其他實用的功能&lt;a id=&#34;sec-1-4&#34; name=&#34;sec-1-4&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;r&lt;/code&gt; 為更新網頁、 &lt;code&gt;d&lt;/code&gt; 為刪除 、 &lt;code&gt;b&lt;/code&gt; 則是變成文字輸出你的分頁後選擇，
+&lt;code&gt;數字+b&lt;/code&gt; 則是直接跳轉至指定Tab， &lt;code&gt;/&lt;/code&gt; 是搜尋當前頁面， &lt;code&gt;u&lt;/code&gt;
+回復剛關閉的頁面也能補全最近關過的頁面， &lt;code&gt;Esc&lt;/code&gt; 取消，其他的上官網看吧。&lt;/p&gt;
+
+&lt;h1 id=&#34;一個小短片-a-id-sec-2-name-sec-2-a:40065ec52ada4f825916b15dd2489b2f&#34;&gt;一個小短片&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;兩分鐘的影片&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://youtu.be/BuANeWJR-lM&#34;&gt;Pentadactyl show on youtube&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

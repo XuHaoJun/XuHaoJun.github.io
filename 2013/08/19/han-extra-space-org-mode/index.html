@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+    <title> 解決 Org-mode(8.x) 轉 Html 中文換行變空格問題 &middot; xublog </title>
+
+    
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/ripples.min.css" rel="stylesheet">
+    <link href="/css/material-wfont.min.css" rel="stylesheet">
+    <link href="/css/highlightjs-default.min.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
+
+    
+    <script src="/js/jquery-1.10.2.min.js"></script>
+    <script defer src="/js/bootstrap.min.js"></script>
+    <script defer src="/js/ripples.min.js"></script>
+    <script src="/js/material.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $.material.init();
+      });
+    </script>
+    <script src="/js/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-50855458-2', 'auto');
+    ga('send', 'pageview');
+    </script>
+    
+
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    
+    
+  </head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid shadow-z-2">
+    <div class="navbar-header">
+      <i id="my-navbar-menu" class="navbar-brand mdi-navigation-menu"
+                             data-toggle="modal" data-target="#my-menu">
+      </i>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <h4 class="navbar-text">
+        
+        post
+        <i class="mdi-navigation-chevron-right"></i>
+        
+        解決 Org-mode(8.x) 轉 Html 中文換行變空格問題
+      </h4>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <i class="navbar-brand mdi-action-search"></i>
+        </li>
+        <li>
+          <form class="navbar-form" action="https://www.google.com/search" method="GET">
+            <input type="hidden" name="sitesearch" value="xuhaojun.github.io" />
+            <input name="q" type="text" result="0" class="form-control col-lg-8" placeholder="" />
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="my-menu" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <a href="http://xuhaojun.github.io" class="btn btn-primary btn-lg btn-block">xublog</a>
+        <a href="/post/" class="btn btn-default btn-lg btn-block">Posts</a>
+        <a href="/about/" class="btn btn-default btn-lg btn-block">About</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+</script>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9 col-sm-12">
+        <hr>
+        <p>基本上是照這兩篇提供的解法去依樣畫葫蘆出來的 org-mode 版本。</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/8550112/prevent-browser-converting-n-between-lines-into-space-for-chinese-characters/8551033#8551033">Prevent browser converting &lsquo;\n&rsquo; between lines into space (for
+Chinese
+characters)</a></li>
+<li><a href="http://chenyufei.info/blog/2011-12-23/fix-chinese-newline-becomes-space-in-browser-problem/">解决 Markdown 转 HTML
+中文换行变空格的问题</a></li>
+</ul>
+
+<p>大致上的解法是將 html 檔案裡，將中文字後有接個換行符的把他合併為一行。<br />
+感覺上是個 workaround 的方法，如果在餵給 rss
+似乎又會有問題，不過我無法忍受那些多餘的空格。</p>
+
+<p>代碼如下：</p>
+
+<pre><code>(defun han/org-html-delete-extra-space (string backend info)
+  &quot;Let chinese word to a line if match /han\newline/&quot;
+  (when (and (org-export-derived-backend-p backend 'html)
+             (string-match &quot;\\cc\n&quot; string))
+    (replace-regexp-in-string &quot;\\(\\cc\\)\n\\(\\cc\\)&quot; &quot;\\1\\2&quot; string)))
+
+(eval-after-load 'ox-html
+  '(add-to-list 'org-export-filter-final-output-functions
+                'han/org-html-delete-extra-space))
+</code></pre>
+
+<p>順便吐槽一下 emacs 裡的 regex，實在太多 <code>\</code> 了<br />
+這是上面連結文中 Ruby 的 Regex 樣式：</p>
+
+<pre><code># \p{Han} 是漢字
+gsub(/(\p{Han})\n(\p{Han})/m, '\1\2')
+</code></pre>
+
+<p>這是 Emacs-lisp 的：</p>
+
+<pre><code>;; \\cc 是漢字
+(replace-regexp-in-string &quot;\\(\\cc\\)\n\\(\\cc\\)&quot; &quot;\\1\\2&quot; string)
+</code></pre>
+
+        <hr>
+        <div class="well well-sm"> 
+          <h4>August 19, 2013<br>
+            <small>85 words</small></h4>
+          <hr>
+          <strong>Categories</strong>
+          <ul class="list-unstyled">
+            
+            <li><a href="/categories/computer">computer</a></li>
+            
+          </ul>
+          <hr>
+          <strong>Tags</strong><br>
+          <a class="label label-default" href="/tags/html">html</a> <a class="label label-default" href="/tags/org-mode">org-mode</a> 
+          <hr>
+          <ul class="pager">
+            
+            <li>
+              <a class="previous" href="http://xuhaojun.github.io/2013/08/23/emacs-org-octopress/">← Org-mode &#43; Octopress &#43; Github 來搭建 Blog</a>
+            </li>
+            
+            
+            <li>
+              <a class="next" href="http://xuhaojun.github.io/2013/08/17/my-pentadactyl-tip/">使用 Pentadactyl (Firefox add-on) →</a>
+            </li>
+            
+          </ul>
+          <hr>
+          <strong>Comments</strong><br>
+          
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Alogrithm on xublog</title>
+    <link>http://xuhaojun.github.io/tags/alogrithm/</link>
+    <description>Recent content in Alogrithm on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 23 May 2014 18:45:54 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/alogrithm/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Astar Path Finding Example (C)</title>
+      <link>http://xuhaojun.github.io/2014/05/23/astar-c/</link>
+      <pubDate>Fri, 23 May 2014 18:45:54 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/23/astar-c/</guid>
+      <description>
+
+&lt;p&gt;在學校出了個需要寫尋路的期末作業，說實話大一只學過 C++
+，到現在才發覺自己居然沒有認真學過
+C，所以花了三天的時間寫出來能過關的作業：
+&lt;a href=&#34;https://github.com/XuHaoJun/astar-c&#34;&gt;astar-c&lt;/a&gt; 。&lt;/p&gt;
+
+&lt;h1 id=&#34;作業介紹-a-id-sec-1-name-sec-1-a:e38a197891fd8de86956c2fd27369d1e&#34;&gt;作業介紹：&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;地圖初始大小為 20x20 的矩形，人物起始座標是在 &lt;code&gt;(0, 0)&lt;/code&gt; ，分別要照順序走
+&lt;code&gt;((10,
+10), (5, 5), (15, 15))&lt;/code&gt; 這個路徑，且不能重複走兩次，像是你直接斜著走到
+&lt;code&gt;(10,
+10)&lt;/code&gt; 的話就會經過 &lt;code&gt;(5, 5)&lt;/code&gt; 就不符合作業要求了，之後在地圖上隨機放 3~5 個
+2x2
+的矩形方塊作為障礙物，此障礙物不能在初始點和路徑上，並且要有方法繞過障礙物，若路徑完全被擋死請顯示出來，顯示要求不拘（我是每走一步就印出整張地圖和座標訊息）。&lt;/p&gt;
+
+&lt;h1 id=&#34;算法介紹-a-id-sec-2-name-sec-2-a:e38a197891fd8de86956c2fd27369d1e&#34;&gt;算法介紹&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.policyalmanac.org/games/aStarTutorial.htm&#34;&gt;A* Pathfinding for
+Beginners&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;我 Astar 的算法是從上面這個網站學到的，如果你是搜尋 Astar
+到此文章的，強烈建議你看第一手原文，不要看我這殘缺二手中文！&lt;/p&gt;
+
+&lt;p&gt;簡而言之就是每走一步就對周遭的格子進行估值，然後從中選出最適合的格子，然後反覆直到目的或沒路徑。&lt;/p&gt;
+
+&lt;h1 id=&#34;用-c-的心得-a-id-sec-3-name-sec-3-a:e38a197891fd8de86956c2fd27369d1e&#34;&gt;用 C 的心得&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;根本惡夢阿，釋放錯記憶體，指標指錯地方，用到很多 &lt;code&gt;Linked List&lt;/code&gt;
+的結構，每次循環這個結構都要開個 temp 變量，Debug De
+到死，現在那個寫出來的作業懶的和手動釋放記憶體爭鬥了，等忙完其他事在開始重寫那部份吧。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>帕斯卡三角形 (Ruby)</title>
+      <link>http://xuhaojun.github.io/2013/09/03/pascal-triangle-ruby/</link>
+      <pubDate>Tue, 03 Sep 2013 19:37:52 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/09/03/pascal-triangle-ruby/</guid>
+      <description>
+
+&lt;h1 id=&#34;帕斯卡三角形-a-id-sec-1-name-sec-1-a:0638fe5e5d536e297a6ec80324afce45&#34;&gt;帕斯卡三角形&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/PascalTriangleAnimated2.gif/210px-PascalTriangleAnimated2.gif&#34; alt=&#34;img&#34; /&gt;
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def pascal_triangle(n, i = 2, result = [[1], [1,1]])
+  if n == 1
+    [[1]]
+  elsif n == 2
+    [[1], [1,1]]
+  elsif i == n
+    result
+  else
+    current_row = [1]
+    (i-1).times do |n|
+      current_row &amp;lt;&amp;lt; (result[i-1][n] + result[i-1][n+1])
+    end
+    current_row &amp;lt;&amp;lt; 1
+
+    pascal_triangle(n, i+1, result &amp;lt;&amp;lt; current_row)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Image reference: &lt;a href=&#34;https://zh.wikipedia.org/zh-tw/%25E6%259D%25A8%25E8%25BE%2589%25E4%25B8%2589%25E8%25A7%2592%25E5%25BD%25A2&#34;&gt;Pascal-triangle
+Wikipedia-chi&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;output-a-id-sec-2-name-sec-2-a:0638fe5e5d536e297a6ec80324afce45&#34;&gt;Output&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;pst = pascal_triangle(7)
+
+puts pst.pretty_inspect
+
+=begin
+[[1],
+ [1, 1],
+ [1, 2, 1],
+ [1, 3, 3, 1],
+ [1, 4, 6, 4, 1],
+ [1, 5, 10, 10, 5, 1],
+ [1, 6, 15, 20, 15, 6, 1]]
+=&amp;gt; nil
+=end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;check-a-id-sec-3-name-sec-3-a:0638fe5e5d536e297a6ec80324afce45&#34;&gt;Check&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;pst.map {|row| row.reduce(:+) == 2 ** (row.length - 1) }
+# =&amp;gt; [true, true, true, true, true, true, true]
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>阿姆斯壯數 (Ruby)</title>
+      <link>http://xuhaojun.github.io/2013/08/27/armstrong-num-ruby/</link>
+      <pubDate>Tue, 27 Aug 2013 19:32:07 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/27/armstrong-num-ruby/</guid>
+      <description>
+
+&lt;p&gt;寫一些簡單的演算法來熟悉 Ruby。&lt;/p&gt;
+
+&lt;h1 id=&#34;armstrong-number-a-id-sec-1-name-sec-1-a:6486ff3a0a39604736e43d2cf3c6c774&#34;&gt;Armstrong number&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%25E6%25B0%25B4%25E4%25BB%2599%25E8%258A%25B1%25E6%2595%25B0&#34;&gt;阿姆斯壯數 -
+WiKi&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;指一 N 位数，其各个数之 N 次方和等于该数。&lt;/p&gt;
+
+&lt;p&gt;例如 153、370、371 及 407
+就是三位數的水仙花数，其各个数之立方和等于该数：&lt;/p&gt;
+
+&lt;h1 id=&#34;source-code:6486ff3a0a39604736e43d2cf3c6c774&#34;&gt;Source code&lt;/h1&gt;
+
+&lt;p&gt;不曉得型別轉來轉去算不算壞習慣&amp;#x2026;。&lt;/p&gt;
+
+&lt;p&gt;有用到 lazy 這個 enumerator，如果沒用 lazy 的話就會當在那裡了，lazy
+感覺很像是一個一個求值後在判斷在存值，沒有使用的話則一次全部求值後在做事。&lt;/p&gt;
+
+&lt;p&gt;懶的想怎麼做優化了，怕到時候改一改可讀性就沒現在這個好了，先留這個作筆記。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class Integer
+  def armstrong_num? # may be have more better name..
+    sum = 0
+    digits = self.to_s.length
+    digits.times { |n| sum += (self.to_s[n].to_i ** digits) }
+    return sum == self
+  end
+end
+
+# 三位數的所有阿姆斯壯數
+(100...1000).select{ |x| x.armstrong_num? }
+# =&amp;gt; [153, 370, 371, 407]
+
+# 四位數的第一個阿姆斯壯數
+(1000...10000).select{ |x| x.armstrong_num? }.first(1)
+# =&amp;gt; [1634]
+
+# 前 15 個阿姆斯壯數
+(1..Float::INFINITY).lazy.select{ |x| x.armstrong_num? }.first(15)
+# =&amp;gt; [1, 2, 3, 4, 5, 6, 7, 8, 9, 153, 370, 371, 407, 1634, 8208]
+
+# 前三個阿姆斯壯數，從三位數開始
+(100..Float::INFINITY).lazy.select{ |x| x.armstrong_num? }.first(3)
+# =&amp;gt; [153, 370, 371]
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>產生一組不重複整數的集合(Ruby)</title>
+      <link>http://xuhaojun.github.io/2013/08/25/gen-uniq-nums-ruby/</link>
+      <pubDate>Sun, 25 Aug 2013 04:10:14 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2013/08/25/gen-uniq-nums-ruby/</guid>
+      <description>
+
+&lt;p&gt;先用 Ruby 寫以前上 Android 中猜數字範例中用到的算法：&lt;/p&gt;
+
+&lt;h1 id=&#34;normal-way-1-a-id-sec-1-name-sec-1-a:813bc76884f654364af38e575809aea8&#34;&gt;Normal Way - 1&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;def get_uniq_nums(size, range)
+  ary = []
+  begin
+    r = rand(range)
+    if ary.member?(r)
+      next
+    else
+      ary &amp;lt;&amp;lt; r
+    end
+  end while( ary.length &amp;lt; size )
+  return ary
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;記得之前教的不是用 member
+的方法來判斷，當初沒有提到用到集合的概念寫，好像是檢查前面幾個數字的迴圈吧，那陀
+Java 程式碼已經忘光了。&lt;/p&gt;
+
+&lt;p&gt;這是產生 4 個不重複 1~9 的數字，放在一個陣列裡面&lt;br /&gt;
+&lt;code&gt;get_uniq_nums(4, (1...10))&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;變成一個數字，先 join 把他連在一起變成字串，在轉回數字。&lt;br /&gt;
+&lt;code&gt;get_uniq_nums(4, (1...10)).join.to_i&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;normal-way-2-a-id-sec-2-name-sec-2-a:813bc76884f654364af38e575809aea8&#34;&gt;Normal Way - 2&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;def get_uniq_nums(size, range, ary = [])
+  if size.zero?
+    ary
+  elsif ary.member?(r = rand(range))
+    get_uniq_nums(size , range, ary)
+  else
+    get_uniq_nums(size - 1, range, (ary &amp;lt;&amp;lt; r))
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;試了別種寫法，很像叫尾遞迴的方法，跟普通遞迴好像差別在多用一個參數在存值，在
+Emacs lisp
+很像還要多用一個函數才能不影響原來的接口。順便一提，弄不出一個函數的普通遞迴方法。&lt;/p&gt;
+
+&lt;p&gt;以下是普通遞迴版失敗品：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def get_uniq_nums(size, range)
+  if size.zero?
+    []
+  elsif get_uniq_nums(size, range).member?(r = rand(range))
+    get_uniq_nums(size, range)
+  else
+    get_uniq_nums(size - 1, range) &amp;lt;&amp;lt; r
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;set-way-a-id-sec-3-name-sec-3-a:813bc76884f654364af38e575809aea8&#34;&gt;Set Way&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;放狗一搜，找到了其他方法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/119107/how-do-i-generate-a-list-of-n-unique-random-numbers-in-ruby&#34;&gt;How do I generate a list of n unique random numbers in
+Ruby?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Set implements a collection of unordered values with no duplicates.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;set&#39;
+
+def rand_n(n, max)
+  randoms = Set.new
+  loop do
+    randoms &amp;lt;&amp;lt; rand(max)
+    return randoms.to_a if randoms.size &amp;gt;= n
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好吧&amp;#x2026;原來 Ruby 內建了 Set
+的資料型態，第一次發現有內建集合的程式語言，當初應該要想到 Java
+中有沒有這東西。
+上面是用集合內不重複元素的特性，所以在加入元素時天生就會檢查有沒有重複，最後在轉成陣列。&lt;/p&gt;
+
+&lt;p&gt;看來以後可以玩玩看交集、聯集、差集之類的，還有子集合判斷之類的。&lt;/p&gt;
+
+&lt;h1 id=&#34;range-way-1-a-id-sec-4-name-sec-4-a:813bc76884f654364af38e575809aea8&#34;&gt;Range Way - 1&lt;a id=&#34;sec-4&#34; name=&#34;sec-4&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;A Range represents an interval&amp;#x2014;a set of values with a beginning
+and
+an end.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;range = 0...1000000
+how_many = 10000
+
+# first way
+# Array::sample Choose a random element or n random elements from
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;the array.
+    range.to_a.sample(how_many)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# second way
+(range).sort_by{rand}[0...how_many]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;直接從 Range 裡用內建的方法隨機挑，行數完敗上面那兩個。&lt;/p&gt;
+
+&lt;h1 id=&#34;range-way-2-a-id-sec-5-name-sec-5-a:813bc76884f654364af38e575809aea8&#34;&gt;Range Way - 2&lt;a id=&#34;sec-5&#34; name=&#34;sec-5&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;突然想到如果要在生成時就篩選掉不想要數字的話，要怎麼做？&lt;/p&gt;
+
+&lt;p&gt;仔細一想很簡單，直接在在範圍裡改。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Delete 2 from the range of rand
+(1..4).reject { |x| x==2 }.to_a.sample(how_many)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;benchmark-them-a-id-sec-6-name-sec-6-a:813bc76884f654364af38e575809aea8&#34;&gt;Benchmark them&lt;a id=&#34;sec-6&#34; name=&#34;sec-6&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&#34;part-1-a-id-sec-6-1-name-sec-6-1-a:813bc76884f654364af38e575809aea8&#34;&gt;Part 1&lt;a id=&#34;sec-6-1&#34; name=&#34;sec-6-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;benchmark&#39;
+
+range = 0...1000000
+how_many = 10000
+
+## Range way - 1
+Benchmark.realtime do
+  range.to_a.sample(how_many)
+end
+# =&amp;gt; 0.076334817
+
+## Set Way
+Benchmark.realtime do
+  rand_n(how_many, range)
+end
+# =&amp;gt; 0.01060032
+
+## Normal way - 1
+Benchmark.realtime do
+  get_uniq_nums(how_many, range)
+end
+# =&amp;gt; 3.565261117
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;part-2-a-id-sec-6-2-name-sec-6-2-a:813bc76884f654364af38e575809aea8&#34;&gt;Part 2&lt;a id=&#34;sec-6-2&#34; name=&#34;sec-6-2&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;range = 0...1000000
+how_many = 1000000
+
+## Set Way
+Benchmark.realtime do
+  rand_n(how_many, range)
+end
+# =&amp;gt; 11.305328646
+
+## Range way - 1
+Benchmark.realtime do
+  range.to_a.sample(how_many)
+end
+# =&amp;gt; 0.112987391
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Range Way 完敗。 還有沒有實現 Set Way 和 Normal Way 的篩選的功能。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

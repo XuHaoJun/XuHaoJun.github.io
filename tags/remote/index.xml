@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Remote on xublog</title>
+    <link>http://xuhaojun.github.io/tags/remote/</link>
+    <description>Recent content in Remote on xublog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 15 May 2014 18:47:07 +0800</lastBuildDate>
+    <atom:link href="http://xuhaojun.github.io/tags/remote/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Linux 遠程文件編輯</title>
+      <link>http://xuhaojun.github.io/2014/05/15/linux-remote-file-edit/</link>
+      <pubDate>Thu, 15 May 2014 18:47:07 +0800</pubDate>
+      
+      <guid>http://xuhaojun.github.io/2014/05/15/linux-remote-file-edit/</guid>
+      <description>
+
+&lt;p&gt;大部分都是 ssh
+連線過去使用那邊的環境來修改檔案，如果遠程環境沒有稱手的編輯器可是一件很惱人的一件事，所以找了一些方法在本地編輯文件。&lt;/p&gt;
+
+&lt;h1 id=&#34;ssh-filesystem-a-id-sec-1-name-sec-1-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;SSH Filesystem&lt;a id=&#34;sec-1&#34; name=&#34;sec-1&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://fuse.sourceforge.net/sshfs.html&#34;&gt;sshfs&lt;/a&gt;
+是將遠程的文件系統掛載在本地，之後就可以在本地編輯了，也會同步更新上去。&lt;/p&gt;
+
+&lt;h2 id=&#34;example-a-id-sec-1-1-name-sec-1-1-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;Example:&lt;a id=&#34;sec-1-1&#34; name=&#34;sec-1-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;下面的命令會將遠程的家目錄掛載在你本地的 &lt;code&gt;~/dir&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sshfs user@yourdomain:/home/user ~/dir
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之後就可以隨心所欲的編輯 &lt;code&gt;~/dir&lt;/code&gt; 之下的東西了，當然不侷限於來編輯，像是
+gimp、
+mplayer 什麼的都可以！&lt;/p&gt;
+
+&lt;h1 id=&#34;emacs-tramp-a-id-sec-2-name-sec-2-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;Emacs TRAMP&lt;a id=&#34;sec-2&#34; name=&#34;sec-2&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.gnu.org/software/tramp/&#34;&gt;TRAMP&lt;/a&gt; 是在 Emacs
+之下來遠程編輯文件的東西。&lt;/p&gt;
+
+&lt;h2 id=&#34;example-a-id-sec-2-1-name-sec-2-1-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;Example:&lt;a id=&#34;sec-2-1&#34; name=&#34;sec-2-1&#34;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;在 Emacs 之下 &lt;code&gt;M-x find-file&lt;/code&gt; 後輸入 &lt;code&gt;/ssh:user@yourdomain&lt;/code&gt; 然後 Enter
+鍵，就會看到你的家目錄會以 &lt;code&gt;dired-mode&lt;/code&gt;
+的形式開啟，之後選擇你的檔案來編輯！&lt;/p&gt;
+
+&lt;h1 id=&#34;總結-a-id-sec-3-name-sec-3-a:f64facb02be577ab15bca296e5ceef6a&#34;&gt;總結&lt;a id=&#34;sec-3&#34; name=&#34;sec-3&#34;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;如果本地環境允許的話就安裝 &lt;code&gt;sshfs&lt;/code&gt; 吧！這樣方便許多 &lt;code&gt;Emacs TRAMP&lt;/code&gt;
+只能用來編輯文件，而 &lt;code&gt;sshfs&lt;/code&gt; 則不只用來編輯文件，用來看遠程的 pdf
+或影音檔或 copy 檔案都很方便！&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
