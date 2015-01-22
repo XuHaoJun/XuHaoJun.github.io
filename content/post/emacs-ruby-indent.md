@@ -1,0 +1,69 @@
++++
+date = "2013-08-29T20:03:03+08:00"
+title = "Emacs 自動縮進 Ruby's if-else"
+tags = ["emacs", "ruby"]
+categories = ["computer"]
++++
+
+
+# Problem<a id="sec-1" name="sec-1"></a>
+
+當我打完 elsif 時，他應該要縮進到 if 那邊。
+
+    if
+       elsif # Should indent this line
+    end
+
+<!--more-->
+
+
+
+正確的 if-else 縮進：
+
+    if 1>2
+      #....
+    elsif
+      #...
+    else
+      #...
+    end
+
+很明顯 else 和 elsif 是向 if 對齊縮進的。
+
+# Solution<a id="sec-2" name="sec-2"></a>
+
+發現在 Emacs 上沒有自動縮進 Ruby 的 if-else 語法後，去試了一下 vim
+發現可以處理 if-else
+的縮進，當然得跟上！
+
+最簡單的方法就是在按 `space` 時，檢查前一個 word 是不是 `else` 或
+`elsif` 。
+
+首先我有用 ruby-electric，這東西會在你打 `if` 或 `class` 等等
+自動產生一個 `end`
+在下行，他是依據你打 `if<space>` 的 `<space>` 時會觸發產生一個 `end` 。
+
+`<space>` 對應到 ruby-electric-space 這個 funciton，我從 ruby-electric
+裡複製過來，很像不應該這樣做，不過不管了。
+
+以下是修改過後的版本：
+
+    (defun ruby-electric-space (arg)
+      (interactive "P")
+      (self-insert-command (prefix-numeric-value arg))
+      (cond ((ruby-electric-space-can-be-expanded-p)
+             (save-excursion
+               (ruby-indent-line t)
+               (newline)
+               (ruby-electric-insert-end)))
+            ((ruby-electric-space-can-be-indent-p) (ruby-indent-line t))))
+    
+    (defun ruby-electric-space-can-be-indent-p ()
+      (and (ruby-electric-code-at-point-p)
+           (ruby-electric-matching-word-p)))
+    
+    (defun ruby-electric-matching-word-p ()
+      (save-excursion
+        (backward-word)
+        (string-match "\\(\\<else\\>\\|\\<elsif\\>\\)" (current-word))))
+

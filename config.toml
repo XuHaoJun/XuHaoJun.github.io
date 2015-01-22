@@ -1,0 +1,14 @@
+baseurl = "http://xuhaojun.github.io"
+languageCode = "en-us"
+title = "xublog"
+
+[permalinks]
+  post = ":year/:month/:day/:filename/"
+  etc = ":title/"
+
+[params]
+  Description = "XuHaoJun's blog"
+  Author = "XuHaoJun"
+  GoogleAnalyticsUserID = "UA-50855458-2"
+  SearchSite = "xuhaojun.github.io"
+  Disqus = "xublog"
