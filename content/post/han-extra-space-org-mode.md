@@ -26,8 +26,7 @@ characters)](http://stackoverflow.com/questions/8550112/prevent-browser-converti
       "Let chinese word to a line if match /han\newline/"
       (when (and (org-export-derived-backend-p backend 'html)
                  (string-match "\\cc\n" string))
-        (replace-regexp-in-string "\\(\\cc\\)\n\\(\\cc\\)" "\\1\\2"
-string)))
+        (replace-regexp-in-string "\\(\\cc\\)\n\\(\\cc\\)" "\\1\\2" string)))
     
     (eval-after-load 'ox-html
       '(add-to-list 'org-export-filter-final-output-functions
