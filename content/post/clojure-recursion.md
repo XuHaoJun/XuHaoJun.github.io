@@ -22,20 +22,20 @@ Looping](http://clojure.org/functional_programming#Functional%2520Programming--R
 
 ## Test<a id="sec-1-2" name="sec-1-2"></a>
 
--   一個很蠢的測試函式：
+一個很蠢的測試函式：
 
     (defn deep-test [start end step deep-fn]
       (doseq [length (range start end step)]
-        (if (deep-fn length)
-          (println length "Deep Done!"))))
+        (if (deep-fn length) (println length "Deep Done!"))))
+
     (deep-test 5000 10000 1000 deepable-recur?)
     ;;; output->
     ;; 5000 Deep Done!
     ;; 6000 Deep Done!
     ;; 7000 Deep Done!
     ;; 8000 Deep Done!
-    ;; StackOverflowError   clojure.lang.Numbers$LongOps.combine
-(Numbers.java:394)
+    ;; StackOverflowError 
+    ;; clojure.lang.Numbers$LongOps.combine (Numbers.java:394)
 
 # Clojure recur special operator<a id="sec-2" name="sec-2"></a>
 
