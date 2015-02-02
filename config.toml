@@ -1,6 +1,7 @@
 baseurl = "http://xuhaojun.github.io"
 languageCode = "en-us"
 title = "xublog"
+theme = "material"
 
 [permalinks]
   post = ":year/:month/:day/:filename/"
